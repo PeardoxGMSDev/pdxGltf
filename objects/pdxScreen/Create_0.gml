@@ -54,11 +54,7 @@ _fn = "gltf/chess_set_1k.gltf";
 // _fn = "glb/uvcube.glb";
  _fn = "gltf/uvcube-unlit.gltf";
 // _fn = "glb/CarConcept.glb";
-if(os_type == os_windows) {
-    wd = "C:\\src\\GMSglTF\\datafiles\\";
-} else {
-    wd = working_directory;
-}
+wd = working_directory;
 
 
 //_fn = "FlightHelmet\\glTF-Binary\\FlightHelmet.glb";
