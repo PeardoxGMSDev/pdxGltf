@@ -1,0 +1,268 @@
+cene
+
+nodes                       integer [1-*]                   The indices of each root node.                          No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+nodes
+
+camera                      integer                         The index of the camera referenced by this node.        No
+children                    integer [1-*]                   The indices of this node’s children.                    No
+skin                        integer                         The index of the skin referenced by this node.          No
+matrix                      number [16]                     A floating-point 4x4 transformation matrix              No, default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
+mesh                        integer                         The index of the mesh in this node.                     No
+rotation                    number [4]                      The node’s unit quaternion rotation (x, y, z, w)        No, default: [0,0,0,1]
+scale                       number [3]                      The node’s non-uniform scale along x, y, and z          No, default: [1,1,1]
+translation                 number [3]                      The node’s translation along the x, y, and z axes.      No, default: [0,0,0]
+weights                     number [1-*]                    The weights of the instantiated morph target.           No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+mesh
+
+primitives                  mesh.primitive [1-*]            An array of primitives, each defining geometry.         Yes
+weights                     number [1-*]                    Array of weights to be applied to the morph targets.    No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+mesh.primitive
+
+attributes                  object                          A plain JSON object,                                    Yes
+indices                     integer                         The index of the accessor containing vertex indices.    No
+material                    integer                         The index of the material to apply.                     No
+mode                        integer                         The topology type of primitives to render.              No, default: 4
+targets                     object [1-*]                    An array of morph targets.                              No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+material
+
+name                        string                          The user-defined name of this object.                   No
+pbrMetallicRoughness        material.pbrMetallicRoughness   PBR metallic-roughness material model                   No
+normalTexture               material.normalTextureInfo      The tangent space normal texture.                       No
+occlusionTexture            material.occlusionTextureInfo   The occlusion texture.                                  No
+emissiveTexture             textureInfo                     The emissive texture.                                   No
+emissiveFactor              number [3]                      The factors for the emissive color of the material.     No, default: [0,0,0]
+alphaMode                   string                          The alpha rendering mode of the material.               No, default: "OPAQUE"
+alphaCutoff                 number                          The alpha cutoff value of the material.                 No, default: 0.5
+doubleSided                 boolean                         Specifies whether the material is double sided.         No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+material.pbrMetallicRoughness
+
+baseColorFactor             number [4]                      The factors for the base color of the material.         No, default: [1,1,1,1]
+baseColorTexture            textureInfo                     The base color texture.                                 No
+metallicFactor              number                          The factor for the metalness of the material.           No, default: 1
+roughnessFactor             number                          The factor for the roughness of the material.           No, default: 1
+metallicRoughnessTexture    textureInfo                     The metallic-roughness texture.                         No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+material.normalTextureInfo
+
+index                       integer                         The index of the texture.                               Yes
+texCoord                    integer                         The set index of texture’s TEXCOORD attribute           No, default: 0
+scale                       number                          The scalar parameter applied to each normalTex vector   No, default: 1
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+material.occlusionTextureInfo
+
+index                       integer                         The index of the texture.                               Yes
+texCoord                    integer                         The set index of texture’s TEXCOORD                     No, default: 0
+strength                    number                          A scalar multiplier for the amount of occlusion.        No, default: 1
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+textureInfo
+
+index                       integer                         The index of the texture.                               Yes
+texCoord                    integer                         The set index of texture’s TEXCOORD                     No, default: 0
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+sampler
+
+magFilter                   integer                         Magnification filter.                                   No
+minFilter                   integer                         Minification filter.                                    No
+wrapS                       integer                         S (U) wrapping mode.                                    No, default: 10497
+wrapT                       integer                         T (V) wrapping mode.                                    No, default: 10497
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+accessor
+
+bufferView                  integer                         The index of the bufferView.                            No
+byteOffset                  integer                         The offset relative to the start of the buffer view     No, default: 0
+componentType               integer                         The datatype of the accessor’s components.              Yes
+normalized                  boolean                         Integer values are normalized before usage.             No, default: false
+count                       integer                         The number of elements referenced by this accessor.     Yes
+type                        string                          Specifies the accessor’s type                           Yes
+max                         number [1-16]                   Maximum value of each component in this accessor.       No
+min                         number [1-16]                   Minimum value of each component in this accessor.       No
+sparse                      accessor.sparse                 Sparse storage of elements that deviate.                No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+animation
+
+channels                    animation.channel [1-*]         An array of animation channels                          Yes
+samplers                    animation.sampler [1-*]         An array of animation samplers                          Yes
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+buffer
+
+uri                         string                          The URI (or IRI) of the buffer.                         No
+byteLength                  integer                         The length of the buffer in bytes.                      Yes
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+bufferView
+
+buffer                      integer                         The index of the buffer.                                Yes
+byteOffset                  integer                         The offset into the buffer in bytes.                    No, default: 0
+byteLength                  integer                         The length of the bufferView in bytes.                  Yes
+byteStride                  integer                         The stride, in bytes.                                   No
+target                      integer                         The hint representing the intended GPU buffer type      No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+camera
+
+orthographic                camera.orthographic             An orthographic camera                                  No
+perspective                 camera.perspective              A perspective camera                                    No
+type                        string                          camera uses a perspective or orthographic projection.   Yes
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+camera.Orthographic
+
+xmag                        number                          The horizontal magnification of the view. > 0           Yes
+ymag                        number                          The vertical magnification of the view. > 0             Yes
+zfar                        number                          The distance to the far clipping plane. > 0 > znear.    Yes
+znear                       number                          The floating-point distance to the near clipping plane. Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+camera.Perspective
+
+aspectRatio                 number                          The aspect ratio of the field of view.                  No
+yfov                        number                          The vertical field of view in radians. < π.             Yes
+zfar                        number                          The floating-point distance to the far clipping plane.  No
+znear                       number                          The floating-point distance to the near clipping plane. Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+image
+
+uri                         string                          The URI (or IRI) of the image.                          No
+mimeType                    string                          The image’s media type.                                 No
+bufferView                  integer                         The index of the bufferView that contains the image     No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+skin
+
+inverseBindMatrices         integer                         accessor with 4x4 inverse-bind matrices.                No
+skeleton                    integer                         The index of the node used as a skeleton root.          No
+joints                      integer [1-*]                   Indices of skeleton nodes, used as joints in this skin. Yes
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+texture
+
+sampler                     integer                         The index of the sampler used by this texture           No
+source                      integer                         The index of the image used by this texture             No
+name                        string                          The user-defined name of this object.                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+asset
+
+copyright                   string                          copyright for display to credit the content creator     No
+generator                   string                          Tool that generated this glTF model                     No
+version                     string                          The glTF version in the form of <major>.<minor>         Yes
+minVersion                  string                          The minimum glTF version in the form of <major>.<minor> No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+glTF
+
+extensionsUsed              string [1-*]                    Names of glTF extensions used in this asset.            No
+extensionsRequired          string [1-*]                    Names of glTF extensions required to properly load      No
+accessors                   accessor [1-*]                  An array of accessors.                                  No
+animations                  animation [1-*]                 An array of keyframe animations.                        No
+asset                       asset                           Metadata about the glTF asset.                          Yes
+buffers                     buffer [1-*]                    An array of buffers.                                    No
+bufferViews                 bufferView [1-*]                An array of bufferViews.                                No
+cameras                     camera [1-*]                    An array of cameras.                                    No
+images                      image [1-*]                     An array of images.                                     No
+materials                   material [1-*]                  An array of materials.                                  No
+meshes                      mesh [1-*]                      An array of meshes.                                     No
+nodes                       node [1-*]                      An array of nodes.                                      No
+samplers                    sampler [1-*]                   An array of samplers.                                   No
+scene                       integer                         The index of the default scene.                         No
+scenes                      scene [1-*]                     An array of scenes.                                     No
+skins                       skin [1-*]                      An array of skins.                                      No
+textures                    texture [1-*]                   An array of textures.                                   No
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+accessorSparse
+
+count                       integer                         Number of deviating accessor vals in the sparse array   Yes
+indices                     accessor.sparse.indices         An object pointing to a buffer view of indices          Yes
+values                      accessor.sparse.values          An object pointing to a buffer view of values           Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+accessorSparseIndicies
+
+bufferView                  integer                         The index of the buffer view with sparse indices        Yes
+byteOffset                  integer                         The offset relative to the start of the buffer view     No, default: 0
+componentType               integer                         The indices data type.                                  Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+accessorSparseValues
+
+bufferView                  integer                         The index of the buffer view with sparse indices        Yes
+byteOffset                  integer                         The offset relative to the start of the buffer view     No, default: 0
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+animationChannel
+
+sampler                     integer                         The index of a sampler in this animation                Yes
+target                      animation.channel.target        The descriptor of the animated property.                Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+animationChannelTarget
+
+node                        integer                         The index of the node to animate                        No
+path                        string                          The name of the node’s TRS property to animate...       Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+
+animationChannelSampler
+
+input                       integer                         The index of an accessor keyframe timestamps.           Yes
+interpolation               string                          Interpolation algorithm.                                No, default: "LINEAR"
+output                      integer                         The index of an accessor, containing keyframe output    Yes
+extensions                  extension                       JSON object with extension-specific objects.            No
+extras                      extras                          Application-specific data.                              No
+ 
