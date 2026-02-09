@@ -1,0 +1,21 @@
+{
+  "$GMRoomUI":"",
+  "%Name":"RoomUI",
+  "children":[
+    {"$GMRUILayer":"v1","%Name":"UILayer_1","alignItems":1,"children":[
+        {"$GMRFlexPanel":"","%Name":"FlexPanel_1","alignItems":1,"children":[
+            {"$GMRFlexPanel":"","%Name":"FlexPanel_2","alignItems":2,"alignSelf":2,"children":[],"flexDirection":0,"height":{"unit":2,"value":10.0,},"justifyContent":1,"name":"FlexPanel_2","nodeColour":4283058418,"resourceType":"GMRFlexPanel","resourceVersion":"2.0","width":{"unit":2,"value":100.0,},},
+          ],"flexDirection":0,"height":{"unit":2,"value":10.0,},"justifyContent":1,"maxHeight":{"unit":2,"value":100.0,},"maxWidth":{"unit":2,"value":100.0,},"name":"FlexPanel_1","nodeColour":4286116424,"resourceType":"GMRFlexPanel","resourceVersion":"2.0","width":{"unit":2,"value":100.0,},},
+      ],"flexDirection":0,"gridX":32,"gridY":32,"justifyContent":1,"name":"UILayer_1","nodeColour":4294068393,"resourceType":"GMRUILayer","resourceVersion":"2.0",},
+  ],
+  "locked":false,
+  "name":"RoomUI",
+  "parent":{
+    "name":"pdxGltf",
+    "path":"pdxGltf.yyp",
+  },
+  "resourceType":"GMRoomUI",
+  "resourceVersion":"2.0",
+  "viewspaceChildren":[],
+  "visible":true,
+}

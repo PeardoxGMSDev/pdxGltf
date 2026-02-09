@@ -16,8 +16,8 @@ ehthumbs_vista.db
 $RECYCLE.BIN/
  
 datafiles/c++/
-datafiles/gltf/
-datafiles/glb/
+datafiles/NonFree/
+datafiles/Models/
  
 # Windows Installer files
 *.cab

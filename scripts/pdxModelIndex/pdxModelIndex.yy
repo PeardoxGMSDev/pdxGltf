@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"pdxGltfDataValue",
+  "%Name":"pdxModelIndex",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"pdxGltfDataValue",
+  "name":"pdxModelIndex",
   "parent":{
     "name":"pdxGltf",
     "path":"folders/pdxGltf.yy",

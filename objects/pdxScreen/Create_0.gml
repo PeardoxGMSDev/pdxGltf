@@ -12,48 +12,12 @@ gui_mode = 0;
 show_detail = 0;
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
-var _fn = "glb/textured_1k_cube.glb";
-/*
-_fn = "glb/basic_cube.glb";
-_fn = "glb/cube_pyramid.glb";
-_fn = "glb/squirrel.glb";
-_fn = "glb/world.glb";
-_fn = "glb/ShadedCubeOffsetX30.glb";
-_fn = "glb/CubeRotateTranslate.glb";
-_fn = "glb/watchtower.glb";
-_fn = "glb/Skeleton_Warrior.glb";
-_fn = "glb/Skeleton_Warrior_Free.glb";
-_fn = "glb/ShadedCube.glb";
-_fn = "gltf/basic_cube.gltf";
-_fn = "glb\\door-rotate-square-a.glb";
-_fn = "glb/assetforge-door.glb";
-_fn = "gltf/Rotator.gltf";
-_fn = "glb/rotate.glb";
-_fn = "glb/dice.glb";
-_fn = "glb/ancient_desert_arena.glb";
-_fn = "glb/d6.glb";
-_fn = "glb/d20.glb";
-_fn = "gltf/chess_set_1k.gltf";
-_fn = "glb/chubbycat.glb";
-_fn = "glb/uvcube.glb";
-_fn = "gltf/uvcube-unlit.gltf"; 
-_fn = "glb/boy_ani.glb";
-_fn = "glb/boy.glb";
-_fn = "glb/stonelake.glb";
-_fn = "glb/island.glb";
-_fn = "glb/CarConcept.glb";
-*/
-_fn = "gltf/chess_set_1k.gltf";
+var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
+_fn = "Models/Skeleton_Mage/Animations/Rig_Medium_MovementBasic.glb";
+_fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
+_fn = "Models/Skeleton_Mage/Skeleton_Staff.gltf";
+_fn = "Models/uvcube/glTF/uvcube.gltf";
 
-// _fn = "glb/basic_cube.glb";
-// _fn = "glb/ShadedCube.glb";
-// _fn = "gltf/ShadedCube.gltf";
-// _fn = "glb/d20.glb";
-// _fn = "glb/rotate.glb"
-// _fn = "gltf/Rotator.gltf";
-// _fn = "glb/uvcube.glb";
- _fn = "gltf/uvcube-unlit.gltf";
-// _fn = "glb/CarConcept.glb";
 wd = working_directory;
 
 

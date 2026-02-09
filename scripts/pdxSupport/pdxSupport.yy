@@ -6,7 +6,7 @@
   "name":"pdxSupport",
   "parent":{
     "name":"pdxGltf",
-    "path":"pdxGltf.yyp",
+    "path":"folders/pdxGltf.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
