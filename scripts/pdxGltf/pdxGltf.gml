@@ -60,6 +60,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             return 0;
         }
     }
+    
     static createCounts = function() {
         self.counts.asset =              self.getCount(self.data, "asset");
         self.counts.extensionsRequired = self.getCount(self.data, "extensionsRequired");
@@ -77,6 +78,34 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.counts.skins =              self.getCount(self.data, "skins");
         self.counts.cameras =            self.getCount(self.data, "cameras");
         self.counts.images =             self.getCount(self.data, "images");
+    }
+    
+    static addTreeKeyValue = function(key, object, treeNode) {
+        var val = object[$ key];
+        if(typeof(val) == "struct") {
+            var keys = struct_get_names(val);
+            var leaf = treeNode.addNode(key);
+            for(var i=0, n=array_length(keys); i<n; i++) {
+                self.addTreeKeyValue(keys[i], val, leaf);    
+            }
+            
+        } else {
+            treeNode.addItem(key, val);
+        }
+    }
+    
+    static addTreeMisc = function(object, treeNode) {
+        if(structHas(object, "extensions")) {
+            self.addTreeKeyValue("extensions", object, treeNode);
+            // treeNode.addItem("extensions", object.extensions);
+        }
+        if(structHas(object, "extras")) {
+            treeNode.addItem("extras", object.extras);
+        }
+        if(structHas(object, "unhandled")) {
+            treeNode.addItem("unhandled", object.unhandled);
+        }
+        
     }
     
     static gatherErrors = function() {
@@ -187,14 +216,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     
     static addTreeMesh = function(txt) {
         self.tree[0] += txt;
-    }
-
-    static addTreeMaterialNode = function(caption) {
-        // self.tree[1] += txt;
-    }
-    
-    static addTreeMaterial = function(caption, data) {
-        // self.tree[1] += txt;
     }
 
     static free = function() {
@@ -480,7 +501,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.accessorData[index] = new_struct;
     }
 
-    
     static processAccessors = function(depth = 0) {
         var _al = array_length(self.data.accessors);
         if(is_undefined(self.accessorData)) {
@@ -498,6 +518,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(structHas(textureInfo, "texCoord")) {
             treeNode.addItem("texCoord", textureInfo.texCoord);
         }
+        self.addTreeMisc(textureInfo, treeNode);
     }
 
     static processMaterialOcclusionTexture = function(occlusionTexture, treeNode) {
@@ -512,6 +533,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(structHas(occlusionTexture, "strength")) {
             leaf.addItem("strength", occlusionTexture.strength);
         }
+        self.addTreeMisc(occlusionTexture, treeNode);
     }
     
     static processMaterialNormalTexture = function(normalTexture, treeNode) {
@@ -526,6 +548,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(structHas(normalTexture, "scale")) {
             leaf.addItem("scale", normalTexture.scale);
         }
+        self.addTreeMisc(normalTexture, treeNode);
     }
 
 /*
@@ -555,9 +578,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             var metalNode = leaf.addNode("metallicRoughnessTexture");
             self.processMaterialTextureInfo(pbrMetallicRoughness.metallicRoughnessTexture, metalNode);
         }
-        if(structHas(pbrMetallicRoughness, "unhandled")) {
-            leaf.addItem("unhandled", pbrMetallicRoughness.unhandled);
-        }    
+        self.addTreeMisc(pbrMetallicRoughness, treeNode);
     }
     
     
@@ -597,12 +618,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             var emleaf = leaf.addNode("emissiveTexture");
             self.processMaterialTextureInfo(material.emissiveTexture, emleaf);
         }
-        if(structHas(material, "extensions")) {
-            leaf.addItem("extensions", material.extensions);
-        }    
-        if(structHas(material, "unhandled")) {
-            leaf.addItem("unhandled", material.unhandled);
-        }    
+        self.addTreeMisc(material, treeNode);
 
     }
         
