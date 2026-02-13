@@ -13,10 +13,16 @@ show_detail = 0;
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
 var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
-_fn = "Models/Skeleton_Mage/Animations/Rig_Medium_MovementBasic.glb";
+/*_fn = "Models/Skeleton_Mage/Animations/Rig_Medium_MovementBasic.glb";
 _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
 _fn = "Models/Skeleton_Mage/Skeleton_Staff.gltf";
 _fn = "Models/uvcube/glTF/uvcube.gltf";
+ */
+//_fn = "Models/deck/glTF-Binary/deck.glb";
+//_fn = "Models/TVRemote/glTF-Binary/TVRemote.glb";
+//_fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
+//_fn = "NonFree/d6.glb";
+
 
 wd = working_directory;
 

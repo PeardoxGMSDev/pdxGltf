@@ -189,8 +189,12 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.tree[0] += txt;
     }
 
-    static addTreeMaterial = function(txt) {
-        self.tree[1] += txt;
+    static addTreeMaterialNode = function(caption) {
+        // self.tree[1] += txt;
+    }
+    
+    static addTreeMaterial = function(caption, data) {
+        // self.tree[1] += txt;
     }
 
     static free = function() {
@@ -487,40 +491,40 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }
     }
     
-    static processMaterialTextureInfo = function(textureInfo, depth = 0) {
+    static processMaterialTextureInfo = function(textureInfo, treeNode) {
         if(structHas(textureInfo, "index")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "index : " + string(textureInfo.index) + "\n");
+            treeNode.addItem("index", textureInfo.index);
         }
         if(structHas(textureInfo, "texCoord")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "texCoord : " + string(textureInfo.texCoord) + "\n");
+            treeNode.addItem("texCoord", textureInfo.texCoord);
         }
     }
 
-    static processMaterialOcclusionTexture = function(occlusionTexture, depth = 0) {
-        self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "occlusionTexture" + "\n");
+    static processMaterialOcclusionTexture = function(occlusionTexture, treeNode) {
+        var leaf = treeNode.addNode("occlusionTexture");
         
         if(structHas(occlusionTexture, "index")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "index : " + string(occlusionTexture.index) + "\n");
+            leaf.addItem("index", occlusionTexture.index);
         }
         if(structHas(occlusionTexture, "texCoord")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "texCoord : " + string(occlusionTexture.texCoord) + "\n");
+            leaf.addItem("texCoord", occlusionTexture.texCoord);
         }
         if(structHas(occlusionTexture, "strength")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "strength : " + string(occlusionTexture.strength) + "\n");
+            leaf.addItem("strength", occlusionTexture.strength);
         }
     }
     
-    static processMaterialNormalTexture = function(normalTexture, depth = 0) {
-        self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "normalTexture" + "\n");
+    static processMaterialNormalTexture = function(normalTexture, treeNode) {
+        var leaf = treeNode.addNode("normalTexture");
         
         if(structHas(normalTexture, "index")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "index : " + string(normalTexture.index) + "\n");
+            leaf.addItem("index", normalTexture.index);
         }
         if(structHas(normalTexture, "texCoord")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "texCoord : " + string(normalTexture.texCoord) + "\n");
+            leaf.addItem("texCoord", normalTexture.texCoord);
         }
         if(structHas(normalTexture, "scale")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "scale : " + string(normalTexture.scale) + "\n");
+            leaf.addItem("scale", normalTexture.scale);
         }
     }
 
@@ -531,28 +535,28 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     self.roughnessFactor                 = undefined;    // number                          The factor for the roughness of the material.           No, default: 1
     self.metallicRoughnessTexture        = undefined;    // textureInfo                     The metallic-roughness texture.                         No
 */        
-    static processMaterialPbrMetallicRoughness = function(pbrMetallicRoughness, depth = 0) {
-        self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "pbrMetallicRoughness" + "\n");
+    static processMaterialPbrMetallicRoughness = function(pbrMetallicRoughness, treeNode) {
+        var leaf = treeNode.addNode("pbrMetallicRoughness");
         
         if(structHas(pbrMetallicRoughness, "baseColorFactor")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "baseColorFactor : " + string(pbrMetallicRoughness.baseColorFactor) + "\n");
+            leaf.addItem("baseColorFactor", pbrMetallicRoughness.baseColorFactor);
         }
         if(structHas(pbrMetallicRoughness, "metallicFactor")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "metallicFactor : " + string(pbrMetallicRoughness.metallicFactor) + "\n");
+            leaf.addItem("metallicFactor", pbrMetallicRoughness.metallicFactor);
         }
         if(structHas(pbrMetallicRoughness, "roughnessFactor")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "roughnessFactor : " + string(pbrMetallicRoughness.roughnessFactor) + "\n");
+            leaf.addItem("roughnessFactor", pbrMetallicRoughness.roughnessFactor);
         }
         if(structHas(pbrMetallicRoughness, "baseColorTexture")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "baseColorTexture\n");
-            self.processMaterialTextureInfo(pbrMetallicRoughness.baseColorTexture, depth+1);
+            var baseNode = leaf.addNode("baseColorTexture");
+            self.processMaterialTextureInfo(pbrMetallicRoughness.baseColorTexture, baseNode);
         }
         if(structHas(pbrMetallicRoughness, "metallicRoughnessTexture")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "metallicRoughnessTexture\n");
-            self.processMaterialTextureInfo(pbrMetallicRoughness.metallicRoughnessTexture, depth+1);
+            var metalNode = leaf.addNode("metallicRoughnessTexture");
+            self.processMaterialTextureInfo(pbrMetallicRoughness.metallicRoughnessTexture, metalNode);
         }
         if(structHas(pbrMetallicRoughness, "unhandled")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "unhandled : " + string(pbrMetallicRoughness.unhandled) + "\n");
+            leaf.addItem("unhandled", pbrMetallicRoughness.unhandled);
         }    
     }
     
@@ -568,49 +572,47 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     self.alphaCutoff                     = undefined;    // number                          The alpha cutoff value of the material.                 No, default: 0.5
     self.doubleSided                     = undefined;    // boolean                         Specifies whether the material is double sided.         No
 */
-    static processMaterial = function(material, index, depth = 0) {
+    static processMaterial = function(material, index, treeNode) {
+        var leaf = treeNode.addNode("Material (" + string(index) + ")");
 
         if(structHas(material, "name")) {
-            self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "Material : " + material.name + "\n");
+            leaf.addItem("name", material.name);
         } else {
-            self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "Material : <UNNAMED>\n");
+            leaf.addItem("name", "<UNNAMED>");
         }
         
         if(structHas(material, "pbrMetallicRoughness")) {
-            self.processMaterialPbrMetallicRoughness(material.pbrMetallicRoughness, depth + 2);
+            self.processMaterialPbrMetallicRoughness(material.pbrMetallicRoughness, leaf);
         }
         
         if(structHas(material, "normalTexture")) {
-            self.processMaterialNormalTexture(material.normalTexture, depth + 2);
+            self.processMaterialNormalTexture(material.normalTexture, leaf);
         }
         
         if(structHas(material, "occlusionTexture")) {
-            self.processMaterialOcclusionTexture(material.occlusionTexture, depth + 2);
+            self.processMaterialOcclusionTexture(material.occlusionTexture, leaf);
         }
         
         if(structHas(material, "emissiveTexture")) {
-            self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "emissiveTexture" + "\n");
-            self.processMaterialTextureInfo(material.emissiveTexture, depth + 1);
+            var emleaf = leaf.addNode("emissiveTexture");
+            self.processMaterialTextureInfo(material.emissiveTexture, emleaf);
         }
         if(structHas(material, "extensions")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "extensions : " + string(material.extensions) + "\n");
+            leaf.addItem("extensions", material.extensions);
         }    
         if(structHas(material, "unhandled")) {
-            self.addTreeMaterial(string_repeat(" ", (depth + 1) * TABSIZE) + "unhandled : " + string(material.unhandled) + "\n");
+            leaf.addItem("unhandled", material.unhandled);
         }    
 
     }
         
-    static processMaterials = function(depth = 0) {
+    static processMaterials = function(treeNode) {
         var _al = array_length(self.data.materials);
         if(is_undefined(self.materialData)) {
             self.materialData = array_create(_al, undefined);
         }
         for(var _i = 0; _i < _al; _i++) {
-            if(_i==0) {
-                self.addTreeMaterial(string_repeat(" ", depth * TABSIZE) + "Materials" + "\n");
-            }
-            self.processMaterial(self.data.materials[_i], _i, 1);
+            self.processMaterial(self.data.materials[_i], _i, treeNode);
         }
     }
     
@@ -708,7 +710,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     static build = function() {
         self.processTime = get_timer();
         self.tree = ["","",""];
-        
+        self.tree[1] = new pdxWidgetTreeView("Materials");
         // Clear vertexBuffer
         if(array_length(self.vertexBuffer)>0) {
             array_delete(self.vertexBuffer, 0, array_length(self.vertexBuffer));
@@ -744,7 +746,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
          
         // Materials
         if(self.counts.materials > 0) {
-            self.processMaterials();
+            self.processMaterials(self.tree[1]);
         }
         // Finally build scene(s)       
         if(self.data.scene < self.counts.scenes) {
