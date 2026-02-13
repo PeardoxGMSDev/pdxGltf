@@ -398,6 +398,13 @@ function pdxGltfDataObject() : pdxGltfDataAbstractBase() constructor {
                                     self.animations[_i].init(_value[_i]);
                                 }
                                 break;
+                            case "cameras":
+                                self.cameras = array_create(_al);
+                                for(var _i=0; _i< _al; _i++) {
+                                    self.cameras[_i] = new pdxGltfDataCamera();
+                                    self.cameras[_i].init(_value[_i]);
+                                }
+                                break;
                             default:
                                 self.addError("Unhandled " + _name);
                                 self.copyUnhandled(_name, _value);
@@ -1395,6 +1402,44 @@ function pdxGltfDataCamera() : pdxGltfDataAbstractBase() constructor {
     self.perspective                     = undefined;    // camera.perspective              A perspective camera                                    No
     self.type                            = undefined;    // string                          camera uses a perspective or orthographic projection.   Yes
     self.name                            = undefined;    // string                          The user-defined name of this object.                   No
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of camera is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "name") {
+                if(!self.copyString("name", _value)) {
+                    self.addError("camera element name is not a string");
+                }
+            } else if(_name == "type") {
+                if(!self.copyString("type", _value)) {
+                    self.addError("camera element type is not a string");
+                }
+            } else if(_name == "orthographic") { 
+                if(typeof(_value) == "struct") {
+                    self.orthographic = new pdxGltfDataCameraOrthographic();
+                    self.orthographic.init(_value);
+                } else {
+                    self.addError("accessor.sparse element indices is not a struct");
+                }
+            } else if(_name == "perspective") { 
+                if(typeof(_value) == "struct") {
+                    self.perspective = new pdxGltfDataCameraPerspective();
+                    self.perspective.init(_value);
+                } else {
+                    self.addError("accessor.sparse element indices is not a struct");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+        });
+        if(is_undefined(self.type)) {
+            self.critical("camera type not set");
+        }
+    }
 }
 
 function pdxGltfDataCameraOrthographic() : pdxGltfDataAbstractBase() constructor {
@@ -1402,6 +1447,48 @@ function pdxGltfDataCameraOrthographic() : pdxGltfDataAbstractBase() constructor
     self.ymag                            = undefined;    // number                          The vertical magnification of the view. > 0             Yes
     self.zfar                            = undefined;    // number                          The distance to the far clipping plane. > 0 > znear.    Yes
     self.znear                           = undefined;    // number                          The floating-point distance to the near clipping plane. Yes
+    
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of camera is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "xmag") {
+                if(!self.copyFloat("xmag", _value)) {
+                    self.addError("orthographic camera element xmag is not a float");
+                }
+            } else if(_name == "ymag") {
+                if(!self.copyFloat("ymag", _value)) {
+                    self.addError("orthographic camera element ymag is not a float");
+                }
+            } else if(_name == "zfar") {
+                if(!self.copyFloat("zfar", _value)) {
+                    self.addError("orthographic camera element zfar is not a float");
+                }
+            } else if(_name == "znear") {
+                if(!self.copyFloat("znear", _value)) {
+                    self.addError("orthographic camera element znear is not a float");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+        });
+        if(is_undefined(self.xmag)) {
+            self.critical("camera xmag not set");
+        }
+        if(is_undefined(self.ymag)) {
+            self.critical("camera ymag not set");
+        }
+        if(is_undefined(self.znear)) {
+            self.critical("camera znear not set");
+        }
+        if(is_undefined(self.zfar)) {
+            self.critical("camera zfar not set");
+        }
+    }
+    
 }
 
 function pdxGltfDataCameraPerspective() : pdxGltfDataAbstractBase() constructor {
@@ -1409,6 +1496,42 @@ function pdxGltfDataCameraPerspective() : pdxGltfDataAbstractBase() constructor 
     self.yfov                            = undefined;    // number                          The vertical field of view in radians. < π.             Yes
     self.zfar                            = undefined;    // number                          The floating-point distance to the far clipping plane.  No
     self.znear                           = undefined;    // number                          The floating-point distance to the near clipping plane. Yes
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of camera is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "aspectRatio") {
+                if(!self.copyFloat("aspectRatio", _value)) {
+                    self.addError("perspective camera element aspectRatio is not a float");
+                }
+            } else if(_name == "yfov") {
+                if(!self.copyFloat("yfov", _value)) {
+                    self.addError("perspective camera element yfov is not a float");
+                }
+            } else if(_name == "zfar") {
+                if(!self.copyFloat("zfar", _value)) {
+                    self.addError("perspective camera element zfar is not a float");
+                }
+            } else if(_name == "znear") {
+                if(!self.copyFloat("znear", _value)) {
+                    self.addError("perspective camera element znear is not a float");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+        });
+        if(is_undefined(self.fov)) {
+            self.critical("camera fov not set");
+        }
+        if(is_undefined(self.zfar)) {
+            self.critical("camera zfar not set");
+        }
+    }
+
 }
 
 function pdxGltfDataImage() : pdxGltfDataAbstractBase() constructor {
