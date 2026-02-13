@@ -111,6 +111,7 @@
     {"$GMIncludedFile":"","%Name":"Gamepad.glb","CopyToMask":-1,"filePath":"datafiles/NonFree/Gamepad/glTF-Binary","name":"Gamepad.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"Gamepad.json","CopyToMask":-1,"filePath":"datafiles/NonFree/Gamepad/glTF-Binary","name":"Gamepad.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"squirrel.glb","CopyToMask":-1,"filePath":"datafiles/NonFree","name":"squirrel.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"squirrel.json","CopyToMask":-1,"filePath":"datafiles/NonFree","name":"squirrel.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"README.md","CopyToMask":-1,"filePath":"datafiles","name":"README.md","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"struct.txt","CopyToMask":-1,"filePath":"datafiles","name":"struct.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],

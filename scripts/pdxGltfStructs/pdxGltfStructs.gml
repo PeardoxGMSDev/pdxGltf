@@ -384,7 +384,22 @@ function pdxGltfDataObject() : pdxGltfDataAbstractBase() constructor {
                                     self.samplers[_i].init(_value[_i]);
                                 }
                                 break;
+                            case "skins":
+                                self.skins = array_create(_al);
+                                for(var _i=0; _i< _al; _i++) {
+                                    self.skins[_i] = new pdxGltfDataSkin();
+                                    self.skins[_i].init(_value[_i]);
+                                }
+                                break;
+                            case "animations":
+                                self.animations = array_create(_al);
+                                for(var _i=0; _i< _al; _i++) {
+                                    self.animations[_i] = new pdxGltfDataAnimation();
+                                    self.animations[_i].init(_value[_i]);
+                                }
+                                break;
                             default:
+                                self.addError("Unhandled " + _name);
                                 self.copyUnhandled(_name, _value);
                                 break;
                         }
@@ -1282,12 +1297,6 @@ function pdxGltfDataAccessor() : pdxGltfDataAbstractBase() constructor {
 }
 
 
-function pdxGltfDataAnimation() : pdxGltfDataAbstractBase() constructor {
-    self.channels                        = undefined;    // animation.channel [1-*]         An array of animation channels                          Yes
-    self.samplers                        = undefined;    // animation.sampler [1-*]         An array of animation samplers                          Yes
-    self.name                            = undefined;    // string                          The user-defined name of this object.                   No
-}
-
 function pdxGltfDataBuffer() : pdxGltfDataAbstractBase() constructor {
     self.uri                             = undefined;    // string                          The URI (or IRI) of the buffer.                         No
     self.byteLength                      = undefined;    // integer                         The length of the buffer in bytes.                      Yes
@@ -1604,24 +1613,212 @@ function pdxGltfDataSkin() : pdxGltfDataAbstractBase() constructor {
     self.skeleton                        = undefined;    // integer                         The index of the node used as a skeleton root.          No
     self.joints                          = undefined;    // integer [1-*]                   Indices of skeleton nodes, used as joints in this skin. Yes
     self.name                            = undefined;    // string                          The user-defined name of this object.                   No
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of node is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "inverseBindMatrices") {
+                if(!self.copyInteger("inverseBindMatrices", _value)) {
+                    self.addError("skin.values element inverseBindMatrices is not an integer");
+                }
+            } else if(_name == "skeleton") {
+                if(!self.copyInteger("skeleton", _value)) {
+                    self.addError("skin.values element skeleton is not an integer");
+                }
+            } else if(_name == "name") {
+                if(!self.copyString("name", _value)) {
+                    self.addError("texture name is not a string");
+                }
+            } else if(_name == "joints") {
+                if(typeof(_value) == "array") {
+                    if(!self.copyIntegerArray("joints", _value)) {
+                        self.addError("Bad Array for joints");
+                    }
+                } else {
+                    self.addError("skin.joints is not an array");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+            
+            } );
+        if(is_undefined(self.joints)) {
+            self.critical("skin.joints not set");
+        }
+    }
 }
+
+function pdxGltfDataAnimation() : pdxGltfDataAbstractBase() constructor {
+    self.channels                        = undefined;    // animation.channel [1-*]         An array of animation channels                          Yes
+    self.samplers                        = undefined;    // animation.sampler [1-*]         An array of animation samplers                          Yes
+    self.name                            = undefined;    // string                          The user-defined name of this object.                   No
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of node is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "name") {
+                if(!self.copyString("name", _value)) {
+                    self.addError("animation name is not a string");
+                }
+            } else if(_name == "samplers") { 
+                if(is_array(_value)) {
+                    var _al = array_length(_value);
+                    self.samplers = array_create(_al);
+                    for(var _i=0; _i< _al; _i++) {
+                        if(typeof(_value[_i]) == "struct") {
+                            self.samplers[_i] = new pdxGltfDataAnimationSampler();
+                            self.samplers[_i].init(_value[_i]);
+                        } else {
+                            self.addError("animation.sampler element is not a struct");
+                        }
+                    }
+                } else {
+                    self.addError("animation.samplers element is not an array");
+                }
+            } else if(_name == "channels") { 
+                if(is_array(_value)) {
+                    var _al = array_length(_value);
+                    self.channels = array_create(_al);
+                    for(var _i=0; _i< _al; _i++) {
+                        if(typeof(_value[_i]) == "struct") {
+                            self.channels[_i] = new pdxGltfDataAnimationChannel();
+                            self.channels[_i].init(_value[_i]);
+                        } else {
+                            self.addError("animation.channel element is not a struct");
+                        }
+                    }
+                } else {
+                    self.addError("animation.channels element is not an array");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+            
+            } );
+        if(is_undefined(self.channels)) {
+            self.critical("animation.channels not set");
+        }
+        if(is_undefined(self.samplers)) {
+            self.critical("animation.samplers not set");
+        }
+    }
+}
+
+function pdxGltfDataAnimationSampler() : pdxGltfDataAbstractBase() constructor {
+    self.input                           = undefined;    // integer                         The index of an accessor keyframe timestamps.           Yes
+    self.interpolation                   = undefined;    // string                          Interpolation algorithm.                                No, default: "LINEAR"
+    self.output                          = undefined;    // integer                         The index of an accessor, containing keyframe output    Yes
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of node is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "input") {
+                if(!self.copyInteger("input", _value)) {
+                    self.addError("animation.sampler.input is not an integer");
+                }
+            } else if(_name == "output") {
+                if(!self.copyInteger("output", _value)) {
+                    self.addError("animation.sampler.output is not an integer");
+                }
+            } else if(_name == "interpolation") {
+                if(!self.copyString("interpolation", _value)) {
+                    self.addError("animation.sampler.interpolation is not a string");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+            
+            } );
+        if(is_undefined(self.interpolation)) {
+            self.interpolation = "LINEAR";
+        }
+        if(is_undefined(self.input)) {
+            self.critical("animation.sampler.input not set");
+        }
+        if(is_undefined(self.output)) {
+            self.critical("animation.sampler.output not set");
+        }
+    }
+}
+
 
 function pdxGltfDataAnimationChannel() : pdxGltfDataAbstractBase() constructor {
     self.sampler                         = undefined;    // integer                         The index of a sampler in this animation                Yes
     self.target                          = undefined;    // animation.channel.target        The descriptor of the animated property.                Yes
+
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of node is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "sampler") {
+                if(!self.copyInteger("sampler", _value)) {
+                    self.addError("animation.sampler is not an integer");
+                }
+            } else if(_name == "target") {
+                if(typeof(_value) == "struct") {
+                    self.target = new pdxGltfDataAnimationTarget();
+                    self.target.init(_value);
+                } else {
+                    self.addError("animation.channel.target is not a struct");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+            
+            } );
+        if(is_undefined(self.sampler)) {
+            self.critical("animation.channel.sampler not set");
+        }
+        if(is_undefined(self.target)) {
+            self.critical("animation.channel.target not set");
+        }
+    }
 }
 
-function pdxGltfDataAnimationChannelTarget() : pdxGltfDataAbstractBase() constructor {
+function pdxGltfDataAnimationTarget() : pdxGltfDataAbstractBase() constructor {
     self.node                            = undefined;    // integer                         The index of the node to animate                        No
     self.path                            = undefined;    // string                          The name of the node’s TRS property to animate...       Yes
-}
 
-function pdxGltfDataAnimationChannelSampler() : pdxGltfDataAbstractBase() constructor {
-    self.input                           = undefined;    // integer                         The index of an accessor keyframe timestamps.           Yes
-    self.interpolation                   = undefined;    // string                          Interpolation algorithm.                                No, default: "LINEAR"
-    self.output                          = undefined;    // integer                         The index of an accessor, containing keyframe output    Yes
+    static init = function(object) {
+        if(typeof(object) != "struct") {
+            self.critical("Type of node is " + typeof(object));
+        }
+        struct_foreach(object, function(_name, _value) {
+            if(_name == "node") {
+                if(!self.copyInteger("node", _value)) {
+                    self.addError("animation.target.node is not an integer");
+                }
+            } else if(_name == "path") {
+                if(!self.copyString("path", _value)) {
+                    self.addError("animation.target.path is not a string");
+                }
+            } else if(_name == "extensions") {
+                self.copyExtensions(_value);
+            } else if(_name == "extras") {
+                self.copyExtras(_value);
+            }
+            
+            } );
+        if(is_undefined(self.path )) {
+            self.critical("animation.target.path not set");
+        }
+    }
 }
-
 
 
 
