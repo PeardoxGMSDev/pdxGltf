@@ -29,7 +29,7 @@ _fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";
-_fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
+// _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
 
 
 wd = working_directory;
@@ -41,6 +41,7 @@ wd = working_directory;
 
 model_file = wd + _fn;
 amodel = openModel(model_file);
+// amodel.critical("Quit?")
 
 //amodel = openModel(working_directory + _fn);
 if(amodel) {

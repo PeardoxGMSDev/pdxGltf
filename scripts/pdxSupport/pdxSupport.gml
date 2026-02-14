@@ -157,12 +157,10 @@ function pdxException() constructor {
     }
     
     static critical = function(errmsg) {
-        if(show_question(errmsg)) {
-            
-        } else {
-            throw(errmsg);    
+        var quit = show_question(errmsg + "\n\nTry to continue?");
+        if(!quit) {
+            game_end();
         }
-        
     }
     
     static hasErrors = function() {
