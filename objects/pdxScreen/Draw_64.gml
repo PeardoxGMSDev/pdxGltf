@@ -14,7 +14,7 @@ if(amodel == false) {
 
 amodel_data = amodel.data;
 
-draw_text((virtual_width * virtual_scale) - 20,  20, "Process : " + string_format(amodel.processTime/1000000, 1, 6) + ", Load : " + string_format(amodel.loadTime/1000000, 1, 6) + ", Read : " + string_format(amodel.readTime/1000000, 1, 6) + ", FPS : " + string(fps) + ", RealFPS : " + string(tfps/nfps));
+draw_text((virtual_width * virtual_scale) - 20,  20, "Build : " + string_format(amodel.buildTime/1000000, 1, 6) + ", Process : " + string_format(amodel.processTime/1000000, 1, 6) + ", Load : " + string_format(amodel.loadTime/1000000, 1, 6) + ", Read : " + string_format(amodel.readTime/1000000, 1, 6) + ", FPS : " + string(fps) + ", RealFPS : " + string(tfps/nfps));
 
 draw_set_colour(c_white);
 draw_set_halign(fa_left);
@@ -96,20 +96,20 @@ if(amodel) {
                     }
                     break;
                 case 2: 
-                    if(is_array(amodel.vertexBuffer)) {
-                        var _al = array_length(amodel.vertexBuffer);
+                    if(is_array(amodel.primitiveList)) {
+                        var _al = array_length(amodel.primitiveList);
                         for(var _i=0; _i<_al; _i++) {
-                          draw_text(20, 480 + (_i * 20), "vertexBuffer[" + 
+                          draw_text(20, 480 + (_i * 20), "primitiveList[" + 
                                 string(_i) + 
                                 "] " + 
-                                amodel.vertexBuffer[_i].prettyPrint()
+                                amodel.primitiveList[_i].prettyPrint()
                             );
                             if((80 + (_i * 20)) > (virtual_height - 720)) {
                                 break;
                             }
                         }
                     } else {
-                          draw_text(20, 480, "No VertexBuffer Data") 
+                          draw_text(20, 480, "No primitiveList Data") 
                     }
                     break;
             }

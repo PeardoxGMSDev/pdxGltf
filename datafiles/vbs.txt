@@ -1,0 +1,174 @@
+// uvcube
+[{
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 0.0,
+            "NORMAL": 1.0,
+            "TANGENT": null,
+            "texcoord": [2.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 3.0,
+        "material": 0.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }
+]
+
+// BoxVertexColors
+[{
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 1.0,
+            "NORMAL": 2.0,
+            "TANGENT": null,
+            "texcoord": null,
+            "color": [3.0],
+            "joints": null,
+            "weights": null
+        },
+        "indices": 0.0,
+        "material": null,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }
+]
+
+// ShadedCube
+[{
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 0.0,
+            "NORMAL": 1.0,
+            "TANGENT": null,
+            "texcoord": [2.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 3.0,
+        "material": 0.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }, {
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 4.0,
+            "NORMAL": 5.0,
+            "TANGENT": null,
+            "texcoord": [6.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 3.0,
+        "material": 1.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }, {
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 7.0,
+            "NORMAL": 8.0,
+            "TANGENT": null,
+            "texcoord": [9.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 10.0,
+        "material": 2.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }, {
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 11.0,
+            "NORMAL": 12.0,
+            "TANGENT": null,
+            "texcoord": [13.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 14.0,
+        "material": 3.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }, {
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 15.0,
+            "NORMAL": 16.0,
+            "TANGENT": null,
+            "texcoord": [17.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 18.0,
+        "material": 4.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }, {
+        "extensions": null,
+        "attributes": {
+            "extensions": null,
+            "extras": null,
+            "unhandled": null,
+            "POSITION": 19.0,
+            "NORMAL": 20.0,
+            "TANGENT": null,
+            "texcoord": [21.0],
+            "color": null,
+            "joints": null,
+            "weights": null
+        },
+        "indices": 18.0,
+        "material": 5.0,
+        "mode": 4.0,
+        "targets": null,
+        "extras": null,
+        "unhandled": null
+    }
+]
+
+
+

@@ -120,6 +120,23 @@ function nextSequence(path, base, ext, digits = 3) {
 }
 
 function pdxException() constructor {
+    
+    /// @description Check whether a struct has a key with "defined" value 
+    /// @param {struct} object Structure to check
+    /// @param {String} key Name of field to check exists and not is_undefined
+    /// @return {Bool} Pass / Fail Boolean Value
+    static keyExists = function(object, key) {
+        if(struct_exists(object, key)) {
+            if(is_undefined(object[$ key])) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     static addError = function(errmsg) {
         if(global.pdxThrowNotReturn) {
             throw(errmsg);                
@@ -223,7 +240,7 @@ function openModel(filename) {
     var _parts = getFileParts(filename);
         
     if(_parts.extension == "glb") {
-        _amodel = new pdxGltf();
+        _amodel = new pdxGlb();
         if(_amodel.open(_parts.path, _parts.name, _parts.filebase)) {
             _rval = _amodel;
         } else {

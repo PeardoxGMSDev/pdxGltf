@@ -839,7 +839,7 @@ function pdxGltfDataMeshAttributes() : pdxGltfDataAbstractBase() constructor {
                 if(!self.copyInteger("TANGENT", _value)) {
                     self.addError("attribute element TANGENT is not an integer");
                 }
-            } else if(_name == "COLOR_") {
+            } else if(string_starts_with(_name, "COLOR_")) { 
                 if(!self.setUnderscoreArrayValue("color",_name, _value)) {
                     self.addError("attribute element " + _name + " is not an integer");
                 }

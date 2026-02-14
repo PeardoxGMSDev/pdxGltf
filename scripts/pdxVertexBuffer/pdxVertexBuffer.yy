@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pdxVertexBuffer",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pdxVertexBuffer",
+  "parent":{
+    "name":"pdxGltf",
+    "path":"folders/pdxGltf.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
