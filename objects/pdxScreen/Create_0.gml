@@ -1,4 +1,4 @@
-virtual_scale = 2500;
+virtual_scale = 1;
 virtual_width = 0;
 virtual_height = 0;
 lookat_x = 0;
@@ -31,7 +31,8 @@ var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
 
 _fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
-_fn = "Models/watchtower/glTF-Binary/watchtower.glb";
+//_fn = "Models/watchtower/glTF-Binary/watchtower.glb";
+//_fn = "Models/door-rotate-square-a/glTF-Binary/door-rotate-square-a.glb";
 
 // _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";

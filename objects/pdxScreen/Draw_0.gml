@@ -10,7 +10,7 @@ if(texturegroup_exists("tex_world")) {
 if(amodel) {
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
-    var transform = matrix_build(0,0,0, 270,0,0, 128,128,128);
+    var transform = matrix_build(0,0,0, 270,0,0, 48,48,48);
     matrix_set(matrix_world, transform);
     amodel.render();
     var identity = matrix_build_identity();
