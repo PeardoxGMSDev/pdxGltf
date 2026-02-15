@@ -8,7 +8,16 @@ if(texturegroup_exists("tex_world")) {
 }
 
 if(amodel) {
+    rot++;
+    gpu_set_zwriteenable(true);
+    gpu_set_ztestenable(true);
+    var transform = matrix_build(0,0,0, 0,0,rot, 32,32,32);
+    matrix_set(matrix_world, transform);
     amodel.render();
+    var identity = matrix_build_identity();
+    matrix_set(matrix_world, identity);
+    gpu_set_zwriteenable(false);
+    gpu_set_ztestenable(false);
 }
 
 /*

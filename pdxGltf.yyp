@@ -257,6 +257,8 @@
     {"id":{"name":"pdxSupport","path":"scripts/pdxSupport/pdxSupport.yy",},},
     {"id":{"name":"pdxVertexBuffer","path":"scripts/pdxVertexBuffer/pdxVertexBuffer.yy",},},
     {"id":{"name":"pdxWidgets","path":"scripts/pdxWidgets/pdxWidgets.yy",},},
+    {"id":{"name":"grass64","path":"sprites/grass64/grass64.yy",},},
+    {"id":{"name":"TileSet1","path":"tilesets/TileSet1/TileSet1.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
