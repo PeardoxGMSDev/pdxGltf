@@ -14,7 +14,7 @@ if(amodel == false) {
 
 amodel_data = amodel.data;
 
-draw_text((virtual_width * virtual_scale) - 20,  20, "Build : " + string_format(amodel.buildTime/1000000, 1, 6) + ", Process : " + string_format(amodel.processTime/1000000, 1, 6) + ", Load : " + string_format(amodel.loadTime/1000000, 1, 6) + ", Read : " + string_format(amodel.readTime/1000000, 1, 6) + ", FPS : " + string(fps) + ", RealFPS : " + string(tfps/nfps));
+draw_text((virtual_width * virtual_scale) - 20,  20, "Tris = " + string(global.triCount) + ", Build : " + string_format(amodel.buildTime/1000000, 1, 6) + ", Process : " + string_format(amodel.processTime/1000000, 1, 6) + ", Load : " + string_format(amodel.loadTime/1000000, 1, 6) + ", Read : " + string_format(amodel.readTime/1000000, 1, 6) + ", FPS : " + string(fps) + ", RealFPS : " + string(tfps/nfps));
 
 draw_set_colour(c_white);
 draw_set_halign(fa_left);

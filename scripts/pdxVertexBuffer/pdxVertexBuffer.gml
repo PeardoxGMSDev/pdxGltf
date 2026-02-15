@@ -1,3 +1,7 @@
+vbuf_show_debug = false;
+vbuf_format_show_debug = false;
+triCount = 0;
+
 /// @description Aa Abstract Vertex Buffer
 function pdxVertexBuffer() : pdxException() constructor {
     self.vertexData = undefined;
@@ -23,7 +27,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
         if(is_undefined(primitive)) {
             return false;
         }
-        if(self.keyExists(gltf, "accessorData")) {
+        if(is_array(gltf.accessorData)) {
             var accessorDataCount = array_length(gltf.accessorData);
             var materialDataCount = array_length(gltf.materialData);
 
@@ -32,10 +36,10 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
             
             vertex_format_begin();
             try {
-            	if(self.keyExists(primitive, "attributes")) { 
+            	if(primitive.attributes != undefined) { 
                     var attribs = primitive.attributes;   
                     
-                    if(self.keyExists(attribs, "POSITION")) {
+                    if(attribs.POSITION != undefined) {
                         if(attribs.POSITION >= accessorDataCount) {
                             valid = false;
                         } else if(gltf.accessorData[attribs.POSITION].type != gltfAccessorType.VEC3) {
@@ -44,11 +48,13 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                             valid = false;
                         } else {
                             vertex_format_add_position_3d();
-                            show_debug_message("Added position_3d");
+                            if(global.vbuf_format_show_debug) {
+                                show_debug_message("Added position_3d");
+                            }
                         }
                     }
                     
-                    if(self.keyExists(attribs, "NORMAL")) {
+                    if(attribs.NORMAL != undefined) {
                         if(attribs.NORMAL >= accessorDataCount) {
                             valid = false;
                         } else if(gltf.accessorData[attribs.NORMAL].type != gltfAccessorType.VEC3) {
@@ -57,11 +63,13 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                             valid = false;
                         } else {
                             vertex_format_add_normal();
-                            show_debug_message("Added normal");
+                            if(global.vbuf_format_show_debug) {
+                                show_debug_message("Added normal");
+                            }
                         }
                     }
                     
-                    if(self.keyExists(attribs, "texcoord")) {
+                    if(is_array(attribs.texcoord)) {
                         if(array_length(attribs.texcoord) > 1) {
                             self.critical("Something is using TEXCOORD_1 (or above) - not handled yet");
                             valid = false;
@@ -74,11 +82,13 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                             valid = false;
                         } else {
                             vertex_format_add_texcoord();
-                            show_debug_message("Added texcoord");
+                            if(global.vbuf_format_show_debug) {
+                                show_debug_message("Added texcoord");
+                            }
                         }
                     }
                     
-                    if(self.keyExists(attribs, "color")) {
+                    if(is_array(attribs.color)) {
                         if(array_length(attribs.color) > 1) {
                             self.critical("Something is using COLOR_1 (or above) - not handled yet");
                             valid = false;
@@ -92,20 +102,24 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                         } else {
                             // VEC3 versions WILL be converted to VEC4 (at least for now)
                             vertex_format_add_colour();
-                            show_debug_message("Added color");
+                            if(global.vbuf_format_show_debug) {
+                                show_debug_message("Added color");
+                            }
                         }
                     }
                     
                     // Todo: Add remaining attribs - TANGENT, joints, weights
                 }
                 
-            	if(self.keyExists(primitive, "material")) { 
+            	if(primitive.material != undefined) { 
                     if(primitive.material > materialDataCount) {
                         valid = false;
                     } else {
                         // For baseColor - primitive.material.getBaseColor()
                         vertex_format_add_colour();
-                        show_debug_message("Added material color");
+                        if(global.vbuf_format_show_debug) {
+                            show_debug_message("Added material color");
+                        }
                     }
                 }
             } finally {
@@ -113,7 +127,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                     fmt = vertex_format_end();
                     self.vertexFormat = fmt;
                 } else {
-                    self.addError("Attempted to create invalid vertex format")
+                    self.critical("Attempted to create invalid vertex format")
                 }
             }
         }
@@ -129,37 +143,43 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
     /// @param {Struct.pdxGltfDataMeshPrimitive} primitive A primative structure
     /// @return {Bool} Success / Fail Boolean Value
     static createVertexDataElement = function(gltf, primitive, index, buf) {
-        show_debug_message("Index " + string(index));
+        if(global.vbuf_show_debug) {
+            show_debug_message("Index " + string(index));
+        }
         var colorAssigned = false;
         
-        if(self.keyExists(primitive, "attributes")) { 
+        if(primitive.attributes != undefined) { 
             var attribs = primitive.attributes;   
                     
-            if(self.keyExists(attribs, "POSITION")) {
+            if(attribs.POSITION != undefined) {
                 var pos = gltf.accessorData[attribs.POSITION].getValue(index);
                 vertex_position_3d(buf, pos.x, pos.y, pos.z);
-                show_debug_message("Set position to " + string(pos));
+                if(global.vbuf_show_debug) {
+                    show_debug_message("Set position to " + string(pos));
+                }
             }
             
-            if(self.keyExists(attribs, "NORMAL")) {
+            if(attribs.NORMAL != undefined) {
                 var norm = gltf.accessorData[attribs.NORMAL].getValue(index);
                 if(!is_undefined(norm)) {
                     vertex_normal(buf, norm.x, norm.y, norm.z);
-                } else {
-                    
+                    if(global.vbuf_show_debug) {
+                        show_debug_message("Set normal to " + string(norm));
+                    }
                 }
             }
             
-            if(self.keyExists(attribs, "texcoord")) {
+            if(is_array(attribs.texcoord)) {
                 var tex = gltf.accessorData[attribs.texcoord[0]].getValue(index);
                 if(!is_undefined(tex)) {
                     vertex_texcoord(buf, tex.u, tex.v);
-                } else {
-                    
+                    if(global.vbuf_show_debug) {
+                        show_debug_message("Set texcoord to " + string(tex));
+                    }
                 }
             }
             
-            if(self.keyExists(attribs, "color")) {
+            if(is_array(attribs.color)) {
                 // VEC3 versions WILL be converted to VEC4 (at least for now)
                 var col = gltf.accessorData[attribs.color[0]].getValue(index);
                 if(!is_undefined(col)) {
@@ -180,7 +200,9 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                             break;
                     }
                     vertex_colour(buf, rgb, alpha);
-                } else {
+                    if(global.vbuf_show_debug) {
+                        show_debug_message("Set vertex color to " + string(rgb));
+                    }
                     
                 }
             }
@@ -188,7 +210,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
             // Todo: Add remaining attribs - TANGENT, joints, weights
         }
         
-        if(self.keyExists(primitive, "material")) { 
+        if(primitive.material != undefined) { 
             // For baseColor - primitive.material.getBaseColor()
             var col = gltf.materialData[primitive.material].getBaseColor();
             if(!is_undefined(col)) {
@@ -196,9 +218,11 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                 var alpha = col[3];
                 
                 vertex_colour(buf, rgb, alpha);
-                show_debug_message("Set color to " + string(rgb));
+                if(global.vbuf_show_debug) {
+                    show_debug_message("Set color to " + string(rgb));
+                }
             } else {
-                self.critical("material color failed");
+                self.critical("set material color failed");
             }
         }
     }
@@ -216,18 +240,24 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
         }
         
         var buf = vertex_create_buffer();
+        if(is_undefined(self.vertexFormat)) {
+            self.critical("Vertex format not set");
+        }
         vertex_begin(buf, self.vertexFormat);
         
-        if(self.keyExists(primitive, "mode")) { 
+        if(primitive.mode != undefined) { 
             if(primitive.mode != gltfMeshPrimitiveMode.TRIANGLES) {
                 self.critical("Only primitive mode TRAINGLE is handled currently");
             }
         } else {
             self.critical("primitive has no mode");
         }
-        if(self.keyExists(primitive, "indices")) { 
+        if(primitive.indices != undefined) { 
             if(gltf.accessorData[primitive.indices].type == gltfAccessorType.SCALAR) {
                 var indices = gltf.accessorData[primitive.indices].value;
+                
+                global.triCount += array_length(indices) / 3;
+                
                 for(var i =0, n = array_length(indices); i<n; i++) {
                     var idx = indices[i];
                     self.createVertexDataElement(gltf, primitive, idx, buf);
@@ -238,6 +268,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
         }
         
         vertex_end(buf);
+        vertex_freeze(buf);
         self.vertexSize = vertex_get_buffer_size(buf);
         self.vertexData = buf;
     }

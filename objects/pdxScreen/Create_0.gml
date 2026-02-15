@@ -11,7 +11,7 @@ nfps = 0;
 gui_mode = 0;
 show_detail = 0;
 
-//show_debug_overlay(true);
+show_debug_overlay(true);
 
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
@@ -24,8 +24,8 @@ var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
 
 //_fn = "Models/deck/glTF-Binary/deck.glb";
 //_fn = "Models/TVRemote/glTF-Binary/TVRemote.glb";
-//_fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
 //_fn = "NonFree/d6.glb";
+//_fn = "NonFree/dice.glb";
 //_fn = "NonFree/squirrel.glb";
 
 _fn = "Models/uvcube/glTF/uvcube.gltf";
@@ -34,6 +34,7 @@ _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";
 // _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
 
+_fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
 
 wd = working_directory;
 

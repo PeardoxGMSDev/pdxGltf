@@ -777,10 +777,13 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             array_delete(self.vertexBuffer, 0, array_length(self.vertexBuffer));
         }
         
+        // show_debug_message("Build_time = " + string(get_timer() - self.buildTime));
         for(var i=0, n = array_length(self.primitiveList); i<n; i++) {
+//        for(var i= array_length(self.primitiveList)-1; i>=0; i--) {
             var vbuf = new pdxGltfVertexBuffer();
             if(vbuf.createVertex(self, self.primitiveList[i])) {
                 array_push(self.vertexBuffer, vbuf);
+               // show_debug_message("Build_timen [" + string(self.accessorData[self.primitiveList[i]].) + "] = " + string(get_timer() - self.buildTime));
             } else {
                 self.critical("Bad buffer");
             }
