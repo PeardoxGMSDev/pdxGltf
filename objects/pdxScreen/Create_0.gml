@@ -1,4 +1,4 @@
-virtual_scale = 1;
+virtual_scale = 500;
 virtual_width = 0;
 virtual_height = 0;
 lookat_x = 0;
@@ -10,6 +10,9 @@ tfps = 0;
 nfps = 0;
 gui_mode = 0;
 show_detail = 0;
+
+//show_debug_overlay(true);
+
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
 var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
@@ -27,7 +30,7 @@ var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
 
 _fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
-_fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
+// _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";
 // _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
 
@@ -73,3 +76,22 @@ if(file_exists(_test_image) && _imtest) {
 var _fp_root = layer_get_flexpanel_node("UILayer_1");
 flexpanel_calculate_layout(_fp_root, 2560, 1440, flexpanel_direction.LTR);
 // show_debug_message(_fp_root);
+
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_colour();
+vertex_format_add_texcoord();
+var fmt_default = vertex_format_end();
+
+vb = vertex_create_buffer();
+vertex_begin(vb, fmt_default);
+repeat(100)
+{
+    vertex_position_3d(vb, random(16), random(9), 0);
+    vertex_color(vb, c_white, 1);
+    vertex_texcoord(vb, 0, 0);
+}
+vertex_end(vb);
+
+
+

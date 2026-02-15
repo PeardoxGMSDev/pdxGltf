@@ -136,6 +136,18 @@ function pdxGltfDataValue(valueCount, elementType = gltfComponentType.UNKNOWN) :
         }            
     }
 
+    static set = function(value) {
+        if(is_array(value) && (array_length(value) == self.valueLength)) {
+            for(var elm=0; elm<self.elementLength; elm++) {
+                for(var val=0; val<self.valueLength; val++) {
+                    self.value[(elm * self.valueLength) + val] = value[val];
+                }
+            }
+        } else {
+            self.critical("Attempting to set bad value for a pdxGltfDataValue");
+        }
+    }
+
     static init = function() {
         for(var elm=0; elm<self.elementLength; elm++) {
             for(var val=0; val<self.valueLength; val++) {
@@ -234,7 +246,8 @@ function pdxGltfDataValueVector4(valueCount, elementType): pdxGltfDataValue(valu
     static getValue = function(index) {
         var _idx =  index * self.valueLength;
         return { x: self.value[_idx], y: self.value[_idx+1], z: self.value[_idx+2], w: self.value[_idx+3] };
-    }    
+    }
+        
 }
 
 function pdxGltfDataValueMatrix2(valueCount, elementType): pdxGltfDataValue(valueCount, elementType) constructor {

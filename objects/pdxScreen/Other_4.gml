@@ -13,6 +13,7 @@ if((virtual_width < room_width) && (room_height < virtual_height)) {
     lookat_x = (virtual_width div 2);
     lookat_y = (virtual_height div 2);
 }
+
 var _current_cam = camera_get_active()
 if(_current_cam != -1) {
     camera_destroy(_current_cam);
@@ -20,6 +21,8 @@ if(_current_cam != -1) {
 cam = camera_create();
 view_set_camera(view, cam);
 var _viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
+//  _viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, 0, lookat_x, lookat_y, 1, 0, 0);
+//    _viewmat = matrix_build_lookat(lookat_x, -1000, lookat_y, lookat_x, 0, lookat_y, 0, 0, 1);
 var _projmat = matrix_build_projection_ortho(virtual_width, virtual_height, -32000.0, 64000.0);
 // _projmat = matrix_build_projection_perspective(virtual_width, virtual_height, virtual_width, virtual_width * 2);
 // _projmat = matrix_build_projection_perspective_fov(0.01, virtual_width / virtual_height, 0.1, 10000);

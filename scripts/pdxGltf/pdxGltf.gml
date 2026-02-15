@@ -610,6 +610,9 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             self.processMaterialTextureInfo(material.emissiveTexture, emleaf);
         }
         self.addTreeMisc(material, treeNode);
+        
+        // Todo : Deepcopy
+        self.materialData[index] = material;
 
     }
         
@@ -776,13 +779,19 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         
         for(var i=0, n = array_length(self.primitiveList); i<n; i++) {
             var vbuf = new pdxGltfVertexBuffer();
-            if(vbuf.createVertexFormat(self, self.primitiveList[i])) {
+            if(vbuf.createVertex(self, self.primitiveList[i])) {
                 array_push(self.vertexBuffer, vbuf);
             } else {
                 self.critical("Bad buffer");
             }
         }
         self.buildTime = get_timer() - self.buildTime;
+    }
+    
+    static render = function() {
+        for(var i=0, n=array_length(self.vertexBuffer); i<n; i++) {
+            self.vertexBuffer[i].submit();
+        }        
     }
 }
 

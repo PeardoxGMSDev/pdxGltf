@@ -909,6 +909,26 @@ function pdxGltfDataMaterial() : pdxGltfDataAbstractBase() constructor {
     self.alphaMode                       = undefined;    // string                          The alpha rendering mode of the material.               No, default: "OPAQUE"
     self.alphaCutoff                     = undefined;    // number                          The alpha cutoff value of the material.                 No, default: 0.5
     self.doubleSided                     = undefined;    // boolean                         Specifies whether the material is double sided.         No
+    
+    static getBaseColor = function() {
+        var col = undefined;
+        
+        if(!is_undefined(self.pbrMetallicRoughness)) {
+            col = self.pbrMetallicRoughness.baseColorFactor;
+        }
+        
+        return col;
+    }
+
+    static getBaseTexture = function() {
+        var tex = undefined;
+        
+        if(!is_undefined(self.pbrMetallicRoughness)) {
+            tex = self.pbrMetallicRoughness.baseColorTexture;
+        }
+        
+        return tex;
+    }
 
     static init = function(object) {
         if(typeof(object) != "struct") {
