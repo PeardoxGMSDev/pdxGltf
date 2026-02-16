@@ -291,4 +291,33 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
     }
 }
 
+function pdxGltfVertexBufferSet(): pdxException() constructor {
+    self.buffers = [];
+    self.totalSize = 0;
+    self.count = 0;
+    self.buildTime = 0;
+    
+    static add = function(gltf, primitiveList) {
+        var buildTimer = get_timer();
+        for(var i=0, n = array_length(primitiveList); i<n; i++) {
+            var vbuf = new pdxGltfVertexBuffer();
+            if(vbuf.createVertex(gltf, primitiveList[i])) {
+                self.count++;
+                self.totalSize += vbuf.vertexSize;
+                array_push(self.buffers, vbuf);
+            } else {
+                self.critical("Bad buffer");
+            }
+        }
+        self.buildTime = get_timer() - buildTimer;
+    }
+    
+    static submit = function() {
+        for(var i=0; i<self.count; i++) {
+            self.buffers[i].submit();
+        }        
+        
+    }
+    
+}
 

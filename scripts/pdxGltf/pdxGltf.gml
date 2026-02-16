@@ -31,7 +31,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     self.imagesData = undefined;
     self.materialData = undefined;
 
-    self.vertexBuffer = array_create(0);
+    self.vertexBufferSet = undefined;
     self.primitiveList = array_create(0);
     
     self.tree = ["","",""];
@@ -772,29 +772,31 @@ function pdxGLTFBase(): pdxModelFile() constructor {
 
     static build = function() {
         self.buildTime = get_timer();
+        /*
         // Clear vertexBuffer
         if(array_length(self.vertexBuffer)>0) {
             array_delete(self.vertexBuffer, 0, array_length(self.vertexBuffer));
         }
         
-        // show_debug_message("Build_time = " + string(get_timer() - self.buildTime));
         for(var i=0, n = array_length(self.primitiveList); i<n; i++) {
-//        for(var i= array_length(self.primitiveList)-1; i>=0; i--) {
             var vbuf = new pdxGltfVertexBuffer();
             if(vbuf.createVertex(self, self.primitiveList[i])) {
                 array_push(self.vertexBuffer, vbuf);
-               // show_debug_message("Build_timen [" + string(self.accessorData[self.primitiveList[i]].) + "] = " + string(get_timer() - self.buildTime));
             } else {
                 self.critical("Bad buffer");
             }
         }
         self.buildTime = get_timer() - self.buildTime;
-    }
+        */
+        self.vertexBufferSet = new pdxGltfVertexBufferSet();
+        self.vertexBufferSet.add(self, self.primitiveList);
+        self.buildTime = self.vertexBufferSet.buildTime;
+        }
     
     static render = function() {
-        for(var i=0, n=array_length(self.vertexBuffer); i<n; i++) {
-            self.vertexBuffer[i].submit();
-        }        
+        if(self.vertexBufferSet != undefined) {
+            self.vertexBufferSet.submit();
+        }
     }
 }
 

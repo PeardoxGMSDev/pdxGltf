@@ -14,7 +14,7 @@ if(keyboard_check_pressed(vk_space)) {
 
 if(keyboard_check_pressed(vk_f12)) {
     show_detail++;
-    if(show_detail > 2) {
+    if(show_detail > 3) {
         show_detail = 0;
     }
     

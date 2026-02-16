@@ -33,7 +33,9 @@ _fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 //_fn = "Models/watchtower/glTF-Binary/watchtower.glb";
 //_fn = "Models/door-rotate-square-a/glTF-Binary/door-rotate-square-a.glb";
-
+_fn = "NonFree/d12.glb";
+//_fn = "NonFree/d20.glb";
+//_fn = "NonFree/dice.glb";
 // _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";
 // _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb"; 

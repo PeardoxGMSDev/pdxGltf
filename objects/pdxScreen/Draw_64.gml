@@ -112,6 +112,16 @@ if(amodel) {
                           draw_text(20, 480, "No primitiveList Data") 
                     }
                     break;
+                case 3:
+                    if((amodel.vertexBufferSet != undefined) && (is_array(amodel.vertexBufferSet.buffers))) {
+                        draw_text(20, 480, "Vertex Buffers (" + string(amodel.vertexBufferSet.count) + ") Size = " + string(amodel.vertexBufferSet.totalSize));
+                        for(var i=0; i<amodel.vertexBufferSet.count; i++) {
+                            draw_text(20, 500 + (i * 20), "Vertex Buffer #" + string(i) + " = " + string(amodel.vertexBufferSet.buffers[i].vertexSize));
+                        }        
+                    } else {
+                        draw_text(20, 480, "No Accessor Vertex Buffer") 
+                    }
+                    break;
             }
             break;
         case 1:
