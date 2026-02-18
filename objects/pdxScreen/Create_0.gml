@@ -24,8 +24,6 @@ var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
 //_fn = "Models/Skeleton_Mage/Animations/Rig_Medium_MovementBasic.glb";
 //_fn = "Models/Skeleton_Mage/Skeleton_Mage.glb";
 //_fn = "Models/Skeleton_Mage/Skeleton_Staff.gltf";
-//_fn = "Models/island/glTF-Binary/island.glb";
-//_fn = "Models/island/glTF/island.gltf";
 
 //_fn = "Models/deck/glTF-Binary/deck.glb";
 //_fn = "Models/TVRemote/glTF-Binary/TVRemote.glb";
@@ -40,14 +38,15 @@ _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 _fn = "NonFree/d12.glb";
 //_fn = "NonFree/d20.glb";
 //_fn = "NonFree/dice.glb";
- // _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
-//_fn = "Models/CarConcept/glTF/CarConcept.gltf";
+//_fn = "gltf-samples/Models/CarConcept/glTF/CarConcept.gltf";
 // _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb"; 
 // _fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
+// _fn = "gltf-samples/Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
+// _fn = "Models/Dispatcher/glTF-Binary/Dispatcher.glb";
 
 
 wd = working_directory;
-
+// wd = "c:/src/pdxGltf/datafiles/";
 
 //_fn = "FlightHelmet\\glTF-Binary\\FlightHelmet.glb";
 // _fn = "SimpleSparseAccessor/glTF/SimpleSparseAccessor.gltf"; 
