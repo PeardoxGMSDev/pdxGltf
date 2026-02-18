@@ -771,29 +771,12 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     }
 
     static build = function() {
-        self.buildTime = get_timer();
-        /*
-        // Clear vertexBuffer
-        if(array_length(self.vertexBuffer)>0) {
-            array_delete(self.vertexBuffer, 0, array_length(self.vertexBuffer));
-        }
-        
-        for(var i=0, n = array_length(self.primitiveList); i<n; i++) {
-            var vbuf = new pdxGltfVertexBuffer();
-            if(vbuf.createVertex(self, self.primitiveList[i])) {
-                array_push(self.vertexBuffer, vbuf);
-            } else {
-                self.critical("Bad buffer");
-            }
-        }
-        self.buildTime = get_timer() - self.buildTime;
-        */
         self.vertexBufferSet = new pdxGltfVertexBufferSet();
         self.vertexBufferSet.add(self, self.primitiveList);
         self.buildTime = self.vertexBufferSet.buildTime;
         
         var _outfile = self.filepath + self.filebase + ".vbuf";
-        _outfile = "C:/video/" + self.filebase + ".vbuf";
+        _outfile = "C:/video/vbuffs/" + self.filebase + ".vbuf";
         if(!file_exists(_outfile)) {
             self.vertexBufferSet.export(_outfile);
         }

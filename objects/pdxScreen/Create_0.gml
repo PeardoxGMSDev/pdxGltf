@@ -72,13 +72,13 @@ if(amodel) {
 
 // files = findModels(wd + "glb");
 
-var _test_image = wd + "gltf/imgtest/Mercator_projection_Square";
+var _test_image = wd + "imgtest/xyzcube";
 
 //_test_image += ".gif";
-//_test_image += ".png";
-_test_image += ".jpg";
+_test_image += ".png";
+// _test_image += ".jpg";
 // _test_image += ".qoi";
-var _imtest = false;
+var _imtest = true;
 if(file_exists(_test_image) && _imtest) {
     var _tp = new pdxImage();
     _tp.load_frome_file(_test_image, "tex_world");
