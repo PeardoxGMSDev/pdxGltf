@@ -40,7 +40,7 @@ function validateMagic(buffer, magic) {
     return rval;
 }
 
-function pdxImageDimensions(width = 0, height = 0) constructor {
+function pdxImageDimensions(width = 0, height = 0) : pdxException() constructor {
     self.width = width;
     self.height = height;
     self.colourDepth = 0;
@@ -56,7 +56,7 @@ function pdxImageDimensions(width = 0, height = 0) constructor {
 
 function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width, height) constructor {
     static readChunk = function(buffer, pos) {
-        return { chKLen: buffer_peek(buffer, pos, buffer_u32), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
+        return { chkLen: buffer_peek(buffer, pos, buffer_u32), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
     }
     
     static extractImageInfo = function(buffer, preValidated = false) {
@@ -66,22 +66,29 @@ function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width,
         
         var len = buffer_get_size(buffer);
         var pos = 8; // Start directly after magic
-        while(pos < len) {
+        // There are 12 required bytes of header so make sure we've got enough buffer left
+        while((pos + 12) < len) {
             var chk = self.readChunk(buffer, pos);
             if(chk.chkTyp = 0x52444849) { // IHDR
                 // Found header, read data values
-                self.width = byteSwap32(buffer_peek(buffer, pos + 8, buffer_u32));
-                self.height = byteSwap32(buffer_peek(buffer, pos + 12, buffer_u32));
-                self.colourDepth = buffer_peek(buffer, pos + 16, buffer_u8);
-                self.colourType = buffer_peek(buffer, pos + 17, buffer_u8);
+                // First check we have buffer to read it
+                if((pos + 12 + chk.chkLen) < len) {
+                    self.width = byteSwap32(buffer_peek(buffer, pos + 8, buffer_u32));
+                    self.height = byteSwap32(buffer_peek(buffer, pos + 12, buffer_u32));
+                    self.colourDepth = buffer_peek(buffer, pos + 16, buffer_u8);
+                    self.colourType = buffer_peek(buffer, pos + 17, buffer_u8);
+                } else {
+                    self.addError("Buffer overrun reading image header");
+                }
+                // Finally skip the resat of the file
                 break;
             } else if(chk.chkTyp == 0x444E4549) { // IEND
-                // We should never get here
-                self.width = 0;  // Bad result
-                self.height = 0; // Bad result
+                // We should never get here. If we do skip anything left and exit;
+                self.addError("Buffer overrun reading image header");
                 break;
             }
-            pos += chk.chKLen;
+            // A chunk is <chkLen> + len + typ + crc long so chkLen + 12 (len + typ + crc are u32, crc is after the data
+            pos += chk.chKLen + 12; 
         }
     }
 }

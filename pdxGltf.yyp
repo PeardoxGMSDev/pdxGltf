@@ -16,7 +16,7 @@
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"dds-head.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"dds-head.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"gif-head.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"gif-head.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"jid.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"jid.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jpeg-head.c","CopyToMask":-1,"filePath":"datafiles/c++","name":"jpeg-head.c","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"jpg-head.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"jpg-head.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"png-head.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"png-head.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"tga-head.cpp","CopyToMask":-1,"filePath":"datafiles/c++","name":"tga-head.cpp","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
