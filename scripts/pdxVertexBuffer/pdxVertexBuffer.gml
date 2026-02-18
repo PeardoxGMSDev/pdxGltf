@@ -1,5 +1,6 @@
 vbuf_show_debug = false;
-vbuf_format_show_debug = false;
+vbuf_format_show_debug = true;
+vbuf_color_show_debug = false;
 triCount = 0;
 
 /// @description Aa Abstract Vertex Buffer
@@ -188,19 +189,21 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                     
                     switch(gltf.accessorData[attribs.color[0]].type) {
                         case gltfAccessorType.VEC4:
-                            rgb = make_colour_rgb(col.x, col.y, col.z);
-                            alpha = col.w;
+                            // rgb = make_colour_rgb(col.x, col.y, col.z);
+                            rgb = make_colour_rgb(col.x * 255, col.y * 255, col.z * 255);
+                            alpha = col.w * 255;
                             break;
                         case gltfAccessorType.VEC3:
-                            rgb = make_colour_rgb(col.x, col.y, col.z);
-                            alpha = 1;
+                            //rgb = make_colour_rgb(col.x, col.y, col.z); 
+                            rgb = make_colour_rgb(col.x * 255, col.y * 255, col.z * 255);
+                            alpha = 255;
                             break;
                         default:
                             self.critical("primitive color failed");
                             break;
                     }
                     vertex_colour(buf, rgb, alpha);
-                    if(global.vbuf_show_debug) {
+                    if(global.vbuf_show_debug) || global.vbuf_color_show_debug {
                         show_debug_message("Set vertex color to " + string(rgb));
                     }
                     
@@ -215,7 +218,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
             var col = gltf.materialData[primitive.material].getBaseColor();
             if(!is_undefined(col)) {
                 var rgb = make_colour_rgb(col[0] * 255, col[1] * 255, col[2] * 255);
-                var alpha = col[3];
+                var alpha = col[3] * 255;
                 
                 vertex_colour(buf, rgb, alpha);
                 if(global.vbuf_show_debug) {
@@ -258,6 +261,10 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                 
                 global.triCount += array_length(indices) / 3;
                 
+                    if(global.vbuf_format_show_debug) {
+                        show_debug_message("Reading " + string(array_length(indices)) + " indices");
+                    }
+                
                 for(var i =0, n = array_length(indices); i<n; i++) {
                     var idx = indices[i];
                     self.createVertexDataElement(gltf, primitive, idx, buf);
@@ -268,7 +275,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
         }
         
         vertex_end(buf);
-        vertex_freeze(buf);
+        // vertex_freeze(buf);
         self.vertexSize = vertex_get_buffer_size(buf);
         self.vertexData = buf;
     }
@@ -285,9 +292,20 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
     
     static submit = function() {
         if(!is_undefined(self.vertexData)) {
+            if(1) {
+                if(self.vertexSize == 373995 ) {
+                    vertex_submit(self.vertexData, pr_trianglelist, sprite_get_texture(Image_3, 0));
+                    
+                } else {
+                    vertex_submit(self.vertexData, pr_trianglelist, -1);
+                } 
+             
+            } else {
+                
             vertex_submit(self.vertexData, pr_trianglelist, -1);
         }
        
+    }
     }
 }
 
@@ -304,6 +322,7 @@ function pdxGltfVertexBufferSet(): pdxException() constructor {
             if(vbuf.createVertex(gltf, primitiveList[i])) {
                 self.count++;
                 self.totalSize += vbuf.vertexSize;
+                // show_debug_message(vertex_format_get_info(vbuf.vertexFormat));
                 array_push(self.buffers, vbuf);
             } else {
                 self.critical("Bad buffer");
@@ -319,5 +338,26 @@ function pdxGltfVertexBufferSet(): pdxException() constructor {
         
     }
     
+    static freeze = function() {
+        for(var i=0; i<self.count; i++) {
+            vertex_freeze( self.buffers[i].vertexData);
+        }        
+        
+    }
+    
+    static export = function(filename) {
+        var b = buffer_create(self.totalSize, buffer_grow, 1);
+        var p = 0;
+        for(var i=0; i<self.count; i++) {
+            var v = buffer_create_from_vertex_buffer(self.buffers[i].vertexData, buffer_grow, 1);
+            var s = buffer_get_size(v);
+            buffer_copy(v, 0, s, b, p);
+            p += s;            
+            buffer_delete(v);
+        }        
+        buffer_save(b, filename);
+        buffer_delete(b);
+        
+    }
 }
 

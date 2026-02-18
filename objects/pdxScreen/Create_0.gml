@@ -11,8 +11,12 @@ nfps = 0;
 gui_mode = 0;
 show_detail = 0;
 rot = 0;
+do_draw = true;
 
-show_debug_overlay(true);
+// display_set_timing_method(tm_systemtiming);
+
+// 
+// show_debug_overlay(true);
 
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
@@ -36,10 +40,11 @@ _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 _fn = "NonFree/d12.glb";
 //_fn = "NonFree/d20.glb";
 //_fn = "NonFree/dice.glb";
-// _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
+ // _fn = "Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 //_fn = "Models/CarConcept/glTF/CarConcept.gltf";
 // _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb"; 
 // _fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
+
 
 wd = working_directory;
 
@@ -82,19 +87,3 @@ if(file_exists(_test_image) && _imtest) {
 var _fp_root = layer_get_flexpanel_node("UILayer_1");
 flexpanel_calculate_layout(_fp_root, 2560, 1440, flexpanel_direction.LTR);
 // show_debug_message(_fp_root);
-
-vertex_format_begin();
-vertex_format_add_position_3d();
-vertex_format_add_colour();
-vertex_format_add_texcoord();
-var fmt_default = vertex_format_end();
-
-vb = vertex_create_buffer();
-vertex_begin(vb, fmt_default);
-repeat(100)
-{
-    vertex_position_3d(vb, random(16), random(9), 0);
-    vertex_color(vb, c_white, 1);
-    vertex_texcoord(vb, 0, 0);
-}
-vertex_end(vb);

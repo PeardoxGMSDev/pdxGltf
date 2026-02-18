@@ -7,19 +7,29 @@ if(texturegroup_exists("tex_world")) {
     
 }
 
-if(amodel) {
+if(amodel && do_draw) {
+    rot += 1;
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
-    var transform = matrix_build(0,0,0, 270,0,0, 48,48,48);
-    matrix_set(matrix_world, transform);
+    //shader_set(khr_unlit_vertex);
+    
+    var transform1 = matrix_build(0,0,0, 0, rot,0, 48,48,48);
+    matrix_set(matrix_world, transform1);
     amodel.render();
+ 
+    var transform2 = matrix_build(115,-10,-10, 0, 0, rot, 48,48,48);
+    matrix_set(matrix_world, transform2);
+    amodel.render();
+    
+    var transform3 = matrix_build(-240, 20, 10, rot, 0, 0, 48,48,48);
+    matrix_set(matrix_world, transform3);
+    amodel.render();
+    
     var identity = matrix_build_identity();
     matrix_set(matrix_world, identity);
+    
+    shader_reset();
     gpu_set_zwriteenable(false);
     gpu_set_ztestenable(false);
 }
 
-/*
-var _num = (current_time / 1000 * 12) mod (vertex_get_number(vb) + 1);
-vertex_submit_ext(vb, pr_linestrip, -1, 0, _num);
-*/

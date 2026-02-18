@@ -791,7 +791,16 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.vertexBufferSet = new pdxGltfVertexBufferSet();
         self.vertexBufferSet.add(self, self.primitiveList);
         self.buildTime = self.vertexBufferSet.buildTime;
+        
+        var _outfile = self.filepath + self.filebase + ".vbuf";
+        _outfile = "C:/video/" + self.filebase + ".vbuf";
+        if(!file_exists(_outfile)) {
+            self.vertexBufferSet.export(_outfile);
         }
+        
+        self.vertexBufferSet.freeze();
+
+    }
     
     static render = function() {
         if(self.vertexBufferSet != undefined) {

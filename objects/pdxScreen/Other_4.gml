@@ -1,8 +1,14 @@
-room_width = display_get_width();
-room_height = display_get_height();
-surface_resize(application_surface, room_width, room_height);
-window_enable_borderless_fullscreen(true);
-window_set_fullscreen(true);
+if(os_type == os_gxgames) {
+    room_width = window_get_width();
+    room_height = window_get_height();    
+    surface_resize(application_surface, room_width, room_height);
+} else {
+    room_width = display_get_width();
+    room_height = display_get_height();
+    surface_resize(application_surface, room_width, room_height);
+    window_enable_borderless_fullscreen(true);
+    window_set_fullscreen(true);
+}
 
 virtual_width = room_width / virtual_scale;
 virtual_height = room_height / virtual_scale;

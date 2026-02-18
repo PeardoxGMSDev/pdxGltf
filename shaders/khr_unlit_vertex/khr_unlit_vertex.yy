@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"khr_unlit_vertex",
+  "name":"khr_unlit_vertex",
+  "parent":{
+    "name":"pdxGltf",
+    "path":"pdxGltf.yyp",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}
