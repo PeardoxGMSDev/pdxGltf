@@ -30,7 +30,8 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     self.bufferData = undefined;
     self.imagesData = undefined;
     self.materialData = undefined;
-
+    self.textureData = undefined;
+    
     self.vertexBufferSet = undefined;
     self.primitiveList = array_create(0);
     
@@ -665,6 +666,18 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             self.processImage(self.data.images[_i], _i);
         }
     }
+    
+    static processTextures = function(depth = 0) {
+        var _al = array_length(self.data.textures);
+        if(is_undefined(self.textureData)) {
+            self.textureData = array_create(_al, undefined);
+        }
+        for(var _i = 0; _i < _al; _i++) {
+            self.processTexture(self.data.textures[_i], _i);
+        }
+    }
+    
+    
     /*
     static processBufferView = function(view) {
         
@@ -717,10 +730,13 @@ function pdxGLTFBase(): pdxModelFile() constructor {
          }
     }
     
+    
+    /// @desc Process the raw json into objects
     static process = function() {
         self.processTime = get_timer();
         self.tree = ["","",""];
         self.tree[1] = new pdxWidgetTreeView("Materials");
+        
         // Clear primitiveList
         if(array_length(self.primitiveList)>0) {
             array_delete(self.primitiveList, 0, array_length(self.primitiveList));
@@ -737,23 +753,31 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             if(self.counts.nodes == 0) {
                 return false;
             }
-        }     
+        } else {
+            self.critical("scene param must exist and be integer")
+        }
         
         // Fill the buffers from declared sources
         if(self.counts.buffers > 0) {
             self.processBuffers();
         }
         
-        // Fill the buffers from declared sources
-        if(self.counts.images > 0) {
-            self.processImages();
+        // Now buffers are present we can create all the bufferViews.
+        if(self.counts.bufferViews > 0) {
+//            self.processBufferViews();
         }
+         
         
-        // Now read/decode all bufferViews + buffers
+        // Now populate all accessors from bufferViews (req bufferViews)
         if(self.counts.accessors > 0) {
             self.processAccessors();
         }
          
+        // Fill the textures from declared sources (req bufferViews)
+        if(self.counts.textures > 0) {
+//            self.processTextures();
+        }
+        
         // Materials
         if(self.counts.materials > 0) {
             self.processMaterials(self.tree[1]);
