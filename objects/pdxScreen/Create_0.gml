@@ -13,6 +13,7 @@ show_detail = 0;
 rot = 0;
 do_draw = true;
 
+
 // display_set_timing_method(tm_systemtiming);
 
 // 

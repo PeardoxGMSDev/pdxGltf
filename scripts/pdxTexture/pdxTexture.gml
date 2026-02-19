@@ -56,7 +56,7 @@ function pdxImageDimensions(width = 0, height = 0) : pdxException() constructor 
 
 function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width, height) constructor {
     static readChunk = function(buffer, pos) {
-        return { chkLen: buffer_peek(buffer, pos, buffer_u32), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
+        return { chkLen: byteSwap32(buffer_peek(buffer, pos, buffer_u32)), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
     }
     
     static extractImageInfo = function(buffer, preValidated = false) {
@@ -195,3 +195,8 @@ function pdxImage() : pdxException() constructor {
 
 }
 
+function pdxGltfTextureData() : pdxException() constructor {
+    self.sampler = undefined;
+    self.image   = undefined;
+
+}

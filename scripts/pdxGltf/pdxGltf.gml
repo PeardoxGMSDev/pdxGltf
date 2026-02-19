@@ -28,6 +28,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
 
     self.accessorData = undefined;
     self.bufferData = undefined;
+    self.bufferViewData = undefined;
     self.imagesData = undefined;
     self.materialData = undefined;
     self.textureData = undefined;
@@ -667,6 +668,9 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }
     }
     
+    static processTexture = function(texture, index) {
+    }
+    
     static processTextures = function(depth = 0) {
         var _al = array_length(self.data.textures);
         if(is_undefined(self.textureData)) {
@@ -678,18 +682,30 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     }
     
     
-    /*
-    static processBufferView = function(view) {
-        
+ /*   
+    static processBufferView = function(view, index) {
+        var data = new pdxGltfBufferViewData();
+        // Vopy all view values
+        data.buffer     = view.buffer;
+        data.byteOffset = view.byteOffset;
+        data.byteLength = view.byteLength;
+        data.byteStride = view.byteStride;
+        data.target     = view.target;
+        data.name       = view.name;
+
+        self.bufferViewData[index] = data;
     }
 
     static processBufferViews = function(depth = 0) {
         var _al = array_length(self.data.bufferViews);
+        if(is_undefined(self.bufferViewData)) {
+            self.bufferViewData = array_create(_al, undefined);
+        }        
         for(var _i = 0; _i < _al; _i++) {
-            self.processBufferView(self.data.bufferViews[_i]);
+            self.processBufferView(self.data.bufferViews[_i], i);
         }
     }
-    */
+*/    
     static processBuffer = function(buffer, index) {
         if(self.keyExists(buffer, "uri")) {
             // If the buffer has a uri then we can read it from the file specified
@@ -761,23 +777,17 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.counts.buffers > 0) {
             self.processBuffers();
         }
-        
-        // Now buffers are present we can create all the bufferViews.
-        if(self.counts.bufferViews > 0) {
-//            self.processBufferViews();
+
+        // Fill the textures from declared sources (req bufferViews)
+        if(self.counts.textures > 0) {
+            self.processTextures();
         }
-         
         
         // Now populate all accessors from bufferViews (req bufferViews)
         if(self.counts.accessors > 0) {
             self.processAccessors();
         }
          
-        // Fill the textures from declared sources (req bufferViews)
-        if(self.counts.textures > 0) {
-//            self.processTextures();
-        }
-        
         // Materials
         if(self.counts.materials > 0) {
             self.processMaterials(self.tree[1]);

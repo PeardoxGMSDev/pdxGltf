@@ -13,15 +13,29 @@ if(amodel && do_draw) {
     gpu_set_ztestenable(true);
     //shader_set(khr_unlit_vertex);
     
-    var transform1 = matrix_build(0,0,0, 0, rot,0, 48,48,48);
+    var transform1, transform2, transform3;    
+    
+    if(ortho) {
+        transform1 = matrix_build(lookat_x,lookat_y,0, 0, rot,0, 400,400,400);
+    } else {
+        transform1 = matrix_build(lookat_x,lookat_y,0, 0, rot,0, 248,248,248);
+    }
     matrix_set(matrix_world, transform1);
     amodel.render();
  
-    var transform2 = matrix_build(115,-10,-10, 0, 0, rot, 48,48,48);
+    if(ortho) {
+        transform2 = matrix_build(lookat_x - (lookat_x * (2 / 3)),lookat_y,0, 0, 0, rot, 400,400,400);
+    } else {
+        transform2 = matrix_build(115,-10,-10, 0, 0, rot, 48,48,48);
+    }
     matrix_set(matrix_world, transform2);
     amodel.render();
     
-    var transform3 = matrix_build(-240, 20, 10, rot, 0, 0, 48,48,48);
+    if(ortho) {
+        transform3 = matrix_build(lookat_x + (lookat_x * (2 / 3)),lookat_y,0, 0, 0, rot, 400,400,400);
+    } else {
+        transform3 = matrix_build(740, 20, 10, rot, 0, 0, 48,48,48);
+    }
     matrix_set(matrix_world, transform3);
     amodel.render();
     

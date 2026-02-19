@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"pdxImage",
+  "%Name":"pdxTexture",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"pdxImage",
+  "name":"pdxTexture",
   "parent":{
     "name":"pdxGltf",
     "path":"folders/pdxGltf.yy",

@@ -151,6 +151,9 @@ function getFileParts(filename, delim = "/") {
             if(_trailing_path_count == 0) {
                 parts.name = string_trim(_full_file_parts[_ffp_count - 1]);    
             }
+            if((os_type != os_windows) && (string_length(parts.path)>0)) {
+                parts.path = delim + parts.path;
+            }
             
             var _fname = string_trim(_full_file_parts[_ffp_count - 1]);
             var _file_parts = string_split(_fname, ".", true);
