@@ -1,6 +1,7 @@
 tfps += fps_real;
 nfps++;
 
+draw_set_valign(fa_top);
 draw_set_colour(c_yellow);
 draw_set_halign(fa_right);
 if(amodel == false) {
@@ -150,3 +151,7 @@ if(amodel) {
 
 }
 
+draw_text(20, display_get_gui_height() - 100, "fov = " + string_format(fieldOfView, 0, 9) + ", cpos = " + string(cpos) + ", znear = " + string(znear) + ", zfar = " + string(zfar));
+
+draw_text(20, display_get_gui_height() - 80, "viewmat = " + string(viewmat));
+draw_text(20, display_get_gui_height() - 60, "projmat = " + string(projmat));

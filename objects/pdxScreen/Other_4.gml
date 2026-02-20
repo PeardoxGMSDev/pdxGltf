@@ -27,29 +27,41 @@ if(_current_cam != -1) {
 }
 cam = camera_create();
 
-var _viewmat = undefined;
-var _projmat = undefined;
+viewmat = undefined;
+projmat = undefined;
+zfar = 32000;
+fieldOfView = 30;
+fova = dsin(fieldOfView / 2);
+
+cpos = -(room_height / 2) / fova;
+znear = room_height;
 
 view_set_camera(view, cam);
 if(ortho) {
-    _viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
+    viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
 //  _viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, 0, lookat_x, lookat_y, 1, 0, 0);
 //    _viewmat = matrix_build_lookat(lookat_x, -1000, lookat_y, lookat_x, 0, lookat_y, 0, 0, 1);
-    _projmat = matrix_build_projection_ortho(virtual_width, virtual_height, -32000.0, 64000.0);
+    projmat = matrix_build_projection_ortho(virtual_width, virtual_height, 1, zfar);
     
 } else {
-    _viewmat = matrix_build_lookat(250, 100, 250, 
+    viewmat = matrix_build_lookat(250, 100, 250, 
                                      0,   0,   0, 
                                      0,   1,   0);
     
-    _viewmat = matrix_build_lookat( lookat_x, lookat_y, -2700, 
-                                    lookat_x, lookat_y,   0, 
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos, 
+                                   lookat_x, lookat_y,   0, 
                                     0,    1,   0);
-    _projmat = matrix_build_projection_perspective_fov(30, room_width / room_height, 1, 32000);
+/*    
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, 0, 
+                                    lookat_x, lookat_y, 2700, 
+                                    0,    1,   0);
+*/    
+    projmat = matrix_build_projection_perspective_fov(fieldOfView, room_width / room_height, znear, zfar);
+    projmat = matrix_build_projection_perspective(room_width, room_height, znear, zfar);
 }
-// _projmat = matrix_build_projection_perspective(virtual_width, virtual_height, virtual_width, virtual_width * 2);
-camera_set_view_mat(cam, _viewmat);
-camera_set_proj_mat(cam, _projmat);
+
+camera_set_view_mat(cam, viewmat);
+camera_set_proj_mat(cam, projmat);
 view_enabled = true;
 view_set_visible(view, true);
 view_set_wport(view, virtual_width);
