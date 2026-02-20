@@ -16,7 +16,8 @@ function __InputConfigVerbs()
         IN,
         OUT,
         PULL,
-        PUSH
+        PUSH,
+        MODE
     }
     
     enum INPUT_CLUSTER
@@ -26,19 +27,20 @@ function __InputConfigVerbs()
         NAVIGATION,
     }
     
-    InputDefineVerb(INPUT_VERB.IN,      "in",         [vk_pageup],    [-gp_axisrv]);
-    InputDefineVerb(INPUT_VERB.OUT,    "out",       [vk_pagedown],    [ gp_axisrv]);
-    InputDefineVerb(INPUT_VERB.PULL,    "pull",       [vk_left,  "A"],    [-gp_axisrh]);
-    InputDefineVerb(INPUT_VERB.PUSH,   "push",      [vk_right, "D"],    [ gp_axisrh]);
+    InputDefineVerb(INPUT_VERB.IN,      "in",         [vk_pageup],        [-gp_axisrv]);
+    InputDefineVerb(INPUT_VERB.OUT,     "out",        [vk_pagedown],      [ gp_axisrv]);
+    InputDefineVerb(INPUT_VERB.PULL,    "pull",       [vk_home],          [-gp_axisrh]);
+    InputDefineVerb(INPUT_VERB.PUSH,    "push",       [vk_end],           [ gp_axisrh]);
     InputDefineVerb(INPUT_VERB.UP,      "up",         [vk_up,    "W"],    [-gp_axislv, gp_padu]);
     InputDefineVerb(INPUT_VERB.DOWN,    "down",       [vk_down,  "S"],    [ gp_axislv, gp_padd]);
     InputDefineVerb(INPUT_VERB.LEFT,    "left",       [vk_left,  "A"],    [-gp_axislh, gp_padl]);
     InputDefineVerb(INPUT_VERB.RIGHT,   "right",      [vk_right, "D"],    [ gp_axislh, gp_padr]);
-    InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_f12,            gp_face4);
-    InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_f11,            gp_face3);
+    InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_f12,              gp_face4);
+    InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_f11,              gp_face3);
     
 
     InputDefineVerb(INPUT_VERB.ACCEPT, "accept", vk_space, gp_face1);
+    InputDefineVerb(INPUT_VERB.MODE, "mode", vk_f5, gp_start);
     InputDefineVerb(INPUT_VERB.QUIT, "quit", vk_escape, gp_select);
 
     
