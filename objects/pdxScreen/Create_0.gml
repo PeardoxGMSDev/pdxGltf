@@ -75,17 +75,7 @@ if(amodel) {
 
 // files = findModels(wd + "glb");
 
-var _test_image = wd + "imgtest/xyzcube";
-
-//_test_image += ".gif";
-_test_image += ".png";
-// _test_image += ".jpg";
-// _test_image += ".qoi";
-var _imtest = true;
-if(file_exists(_test_image) && _imtest) {
-    var _tp = new pdxImage();
-    _tp.load_frome_file(_test_image, "tex_world");
-}
+instance_create_depth(1,1,0,testImage);
 
 var _fp_root = layer_get_flexpanel_node("UILayer_1");
 flexpanel_calculate_layout(_fp_root, 2560, 1440, flexpanel_direction.LTR);

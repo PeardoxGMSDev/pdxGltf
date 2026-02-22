@@ -1,15 +1,5 @@
 
 if(amodel && do_draw) {
-    if(texturegroup_exists("tex_world")) {
-        var sprites = texturegroup_get_sprites("tex_world");
-        var spr = sprites[0];
-        var inf = sprite_get_info(spr);
-        draw_sprite(spr,0, 0, 0);
-    //    amodel.error = "texture = " + string(texturegroup_get_status("tex_world"));
-    //    draw_sprite(new_sprite,0, 0, 0);
-        
-    }
-        
         //rot += 1;
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);

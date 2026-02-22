@@ -185,7 +185,8 @@ function pdxImage() : pdxException() constructor {
         
         buffer_copy(inbuf, buffer_offset, buffer_length, self.buffer, 0);
         var _sprite_data = { sprites : {}};
-        _sprite_data.sprites[$ self.sprite_name] = { width : self.sprite_size.width, height : self.sprite_size.height, frames : [  { x : 0, y : 0 } ] };
+//        _sprite_data.sprites[$ self.sprite_name] = { width : self.sprite_size.width, height : self.sprite_size.height, frames : [  { x : 0, y : 0, x_offset: self.sprite_size.width / 2, y_offset: self.sprite_size.height / 2 } ] };
+        _sprite_data.sprites[$ self.sprite_name] = { width : self.sprite_size.width, height : self.sprite_size.height, frames : [  { x : 0, y : 0, x_offset: 0, y_offset: 0 } ] };
         self.texturegroup_name = texturegoup;
         texturegroup_add(self.texturegroup_name, self.buffer, _sprite_data);
         texturegroup_load(self.texturegroup_name);

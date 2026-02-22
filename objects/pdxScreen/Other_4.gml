@@ -30,23 +30,15 @@ cam = camera_create();
 
 viewmat = undefined;
 projmat = undefined;
-fieldOfView = 60;
+fieldOfView = 30;
 
-fova = dsin(fieldOfView / 2);
-//cpos = -( (room_width * (1/1.11803398875)) / 2);
-cpos = -( virtual_width  / 2);
- cpos = -1247.125 / virtual_scale;
+fieldOfView = clamp(fieldOfView, 0.1, 145);
 
+cpos = -( virtual_height / 2) / dtan((fieldOfView) / 2);
+// cpos += 100;
 
-
-if(use_fov) {
-    znear = virtual_height / 4;    
-} else {
-    znear = virtual_height;
-}
-
-znear = 1;
-zfar = 32000;
+znear = clamp(abs(cpos / 100), 1, 10000);
+zfar = clamp(abs(cpos * 100), 1, 6400000);
 
 view_set_camera(view, cam);
 if(ortho) {
@@ -56,18 +48,23 @@ if(ortho) {
     projmat = matrix_build_projection_ortho(virtual_width, virtual_height, 1, zfar);
     
 } else {
-    viewmat = matrix_build_lookat(250, 100, 250, 
-                                     0,   0,   0, 
+    /*
+    viewmat = matrix_build_lookat(   0,   0,   0, 
+                                    250, 250, 250, 
                                      0,   1,   0);
     
-    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos, 
-                                   lookat_x, lookat_y,   cpos + 64, 
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, lookat_y,// cpos, 
+                                   0,    0,   0, // lookat_x, lookat_y,   cpos + 64, 
                                     0,    1,   0);
-/*    
+    
+   
     viewmat = matrix_build_lookat( lookat_x, lookat_y, 0, 
                                     lookat_x, lookat_y, 2700, 
                                     0,    1,   0);
 */    
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos, 
+                                   lookat_x, lookat_y, cpos + 64, 
+                                    0,    1,   0);
     if(use_fov) {
         projmat = matrix_build_projection_perspective_fov(fieldOfView, room_width / room_height, znear, zfar);
         
