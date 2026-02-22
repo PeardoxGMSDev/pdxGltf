@@ -1,5 +1,7 @@
 pdxLastImageIndex = 0;
 pdxImageIndexDigits = 3;
+pdxLastTexturePageIndex = 0;
+pdxTexturePageIndexDigits = 3;
 pdxThrowNotReturn = false;
 pdxGlobalGltfErrorFlag = false;
 pdxGlobalGltfWarningFlag = false;

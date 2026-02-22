@@ -670,6 +670,31 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     // sbtodo
     
     static processTexture = function(texture, index) {
+        var newTexture = new pdxGltfTextureData();
+        newTexture.texture = texture;
+        if(self.keyExists(texture, "source")) {
+            var imgIndex = texture.source;
+            if(self.counts.images > imgIndex) {
+                var img = self.data.images[imgIndex];
+                newTexture.image = new pdxImage();
+                if(!is_undefined(img.bufferView)) {
+                    if(self.counts.bufferViews > img.bufferView) {
+                        var view = self.data.bufferViews[img.bufferView];
+                        
+                        if(newTexture.image.load_from_buffer(self.bufferData[view.buffer], view.byteOffset, view.byteLength)) {
+                            self.textureData[index] = newTexture;
+                        }
+                    }
+                } else if(!is_undefined(img.url)) {
+                    if(newTexture.image.load_frome_file(img.url)) {
+                        self.textureData[index] = newTexture;
+                    }
+                }
+            }
+        }
+        
+        
+        
     }
     
     static processTextures = function(depth = 0) {

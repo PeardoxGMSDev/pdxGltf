@@ -176,7 +176,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                 if(!is_undefined(tex)) {
                     vertex_texcoord(buf, tex.u, tex.v);
                     if(global.vbuf_show_debug || global.vbuf_texcoord_show_debug) {
-                        show_debug_message("Set texcoord to " + string(tex));
+//                        show_debug_message("Set texcoord to " + string(tex));
                     }
                 }
             }

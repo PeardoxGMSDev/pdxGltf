@@ -25,11 +25,11 @@ function byteSwap32(value) {
     
 }
 
-function validateMagic(buffer, magic) {
+function validateMagic(buffer, buffer_offset, magic) {
     var rval = false;
     
     for(var i=0, n = array_length(magic); i < n; i++) {
-        if(buffer_peek(buffer, i, buffer_u8) == magic[i]) {
+        if(buffer_peek(buffer, i + buffer_offset, buffer_u8) == magic[i]) {
             rval = true;
         } else {
             rval = false;
@@ -59,13 +59,13 @@ function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width,
         return { chkLen: byteSwap32(buffer_peek(buffer, pos, buffer_u32)), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
     }
     
-    static extractImageInfo = function(buffer, preValidated = false) {
-        if(!preValidated && !validateMagic(buffer, global.imgMagic[imageFile.PNG])) {
+    static extractImageInfo = function(buffer, buffer_offset, preValidated = false) {
+        if(!preValidated && !validateMagic(buffer, buffer_offset, global.imgMagic[imageFile.PNG])) {
             return;
         }
         
         var len = buffer_get_size(buffer);
-        var pos = 8; // Start directly after magic
+        var pos = buffer_offset + 8; // Start directly after magic
         // There are 12 required bytes of header so make sure we've got enough buffer left
         while((pos + 12) < len) {
             var chk = self.readChunk(buffer, pos);
@@ -101,14 +101,14 @@ function pdxImage() : pdxException() constructor {
     self.sprite_size = undefined;
 
     
-    static getImageType = function(buffer) {
+    static getImageType = function(buffer, buffer_offset) {
         // Default to imageFile.UNKNOWN;
         var rval = imageFile.UNKNOWN;
         
         // Loop over magic numbers but skip UNKNOWN
         for(var i=1, n = array_length(global.imgMagic); i < n; i++) {
             // Check the magic for each supported value
-            var magicok = validateMagic(buffer, global.imgMagic[i]);
+            var magicok = validateMagic(buffer, buffer_offset, global.imgMagic[i]);
             // If the magic number validates...
             if(magicok) {
                 rval = i; // This will now be imageFile.<ImageType>;
@@ -129,16 +129,43 @@ function pdxImage() : pdxException() constructor {
         }
     }
     
-    static load_frome_file = function(filename, texturegoup) {
+    static getFreeImage = function() {
+        global.pdxLastImageIndex++;
+        var seq = string(global.pdxLastImageIndex);
+        return "img-" + string_repeat("0", global.pdxImageIndexDigits - string_length(seq)) + seq;
+    }
+    
+    static getFreeTexturePage = function() {
+        global.pdxLastTexturePageIndex++;
+        var seq = string(global.pdxLastTexturePageIndex);
+        return "tex-" + string_repeat("0", global.pdxTexturePageIndexDigits - string_length(seq)) + seq;
+    }
+    
+    static load_frome_file = function(filename, texturegroup = "") {
+        if(texturegroup == "") {
+            self.texturegroup_name = self.getFreeTexturePage();
+        } else {
+            self.texturegroup_name = texturegroup;
+        }
         var _buffer = buffer_create(0, buffer_grow, 1);
         if(_buffer == -1) {
             throw("Can't create buffer");
         }
         buffer_load_ext(_buffer, filename, 0);        
-        self.load_from_buffer(_buffer, 0, buffer_get_size(_buffer), texturegoup);
+        return self.copy_from_buffer(_buffer, 0, buffer_get_size(_buffer));
     }
     
-    static load_from_buffer = function(inbuf, buffer_offset, buffer_length, texturegoup) {
+    static load_from_buffer = function(inbuf, buffer_offset, buffer_length, texturegroup = "") {
+        if(texturegroup == "") {
+            self.texturegroup_name = self.getFreeTexturePage();
+        } else {
+            self.texturegroup_name = texturegroup;
+        }
+        return self.copy_from_buffer(inbuf, buffer_offset, buffer_length);
+    }
+    
+    
+    static copy_from_buffer = function(inbuf, buffer_offset, buffer_length) {
         // Before we do anything check the buffer is a buffer and it has spave for the image to read
         if(!buffer_exists(inbuf)) {
             self.addError("Buffer does not exist");
@@ -149,7 +176,7 @@ function pdxImage() : pdxException() constructor {
             return false;
         }
         
-        self.imageType = self.getImageType(inbuf);
+        self.imageType = self.getImageType(inbuf, buffer_offset);
         if(self.imageType == imageFile.UNKNOWN ) {
             self.addError("Unsupported Image Format");
             return false;
@@ -162,7 +189,7 @@ function pdxImage() : pdxException() constructor {
                 break;
             case imageFile.PNG:
                 self.sprite_size = new pdxImageDimensionsPNG();
-                self.sprite_size.extractImageInfo(inbuf, true);
+                self.sprite_size.extractImageInfo(inbuf, buffer_offset, true);
                 break;
             default:
                 self.sprite_size = new pdxImageDimensions(0, 0);
@@ -173,9 +200,7 @@ function pdxImage() : pdxException() constructor {
             return false;
         }
                 
-        global.pdxLastImageIndex++;
-        var seq = string(global.pdxLastImageIndex);
-        self.sprite_name = "img-" + string_repeat("0", global.pdxImageIndexDigits - string_length(seq)) + seq;
+        self.sprite_name = getFreeImage();
         
         self.buffer = buffer_create(buffer_length, buffer_fixed, 1);
         if(self.buffer == -1) {
@@ -187,9 +212,10 @@ function pdxImage() : pdxException() constructor {
         var _sprite_data = { sprites : {}};
 //        _sprite_data.sprites[$ self.sprite_name] = { width : self.sprite_size.width, height : self.sprite_size.height, frames : [  { x : 0, y : 0, x_offset: self.sprite_size.width / 2, y_offset: self.sprite_size.height / 2 } ] };
         _sprite_data.sprites[$ self.sprite_name] = { width : self.sprite_size.width, height : self.sprite_size.height, frames : [  { x : 0, y : 0, x_offset: 0, y_offset: 0 } ] };
-        self.texturegroup_name = texturegoup;
         texturegroup_add(self.texturegroup_name, self.buffer, _sprite_data);
         texturegroup_load(self.texturegroup_name);
+        
+        show_debug_message("========> Added sprite " + self.sprite_name + " in tex group " + self.texturegroup_name);
         
         return true;
     }
@@ -197,7 +223,7 @@ function pdxImage() : pdxException() constructor {
 }
 
 function pdxGltfTextureData() : pdxException() constructor {
-    self.sampler = undefined;
+    self.texture = undefined;
     self.image   = undefined;
 
 }
