@@ -142,7 +142,7 @@ if(amodel) {
                 draw_text(800, 80, amodel.error);
             }
             if(amodel.hasWarnings()) {
-                draw_text(1600, 40, "Warning");
+                draw_text(1600, 40, "Warning"); 
                 draw_text(1600, 80, amodel.warning);
             }
             break;
@@ -151,7 +151,12 @@ if(amodel) {
 
 }
 
-draw_text(20, display_get_gui_height() - 100, "fov = " + string_format(fieldOfView, 0, 9) + ", cpos = " + string(cpos) + ", znear = " + string(znear) + ", zfar = " + string(zfar));
+draw_text(20, display_get_gui_height() - 160, "fov = " + string_format(fieldOfView, 0, 9) + ", cpos = " + string(cpos) + ", znear = " + string(znear) + ", zfar = " + string(zfar) + ", fova = " + string(fova));
 
-draw_text(20, display_get_gui_height() - 80, "viewmat = " + string(viewmat));
-draw_text(20, display_get_gui_height() - 60, "projmat = " + string(projmat));
+draw_text(20, display_get_gui_height() - 120, "viewmat = " + string(viewmat));
+draw_text(20, display_get_gui_height() - 100, "projmat = " + string(projmat));
+draw_text(20, display_get_gui_height() -  60, "world matrix      = " + string(matrix_get(matrix_world)));
+draw_text(20, display_get_gui_height() -  40, "projection matrix = " + string(matrix_get(matrix_projection)));
+draw_text(20, display_get_gui_height() -  20, "view matrix       = " + string(matrix_get(matrix_view)));
+
+draw_rectangle(1,1,display_get_gui_width()-2, display_get_gui_height()-2, true);

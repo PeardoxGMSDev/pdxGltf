@@ -667,6 +667,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             self.processImage(self.data.images[_i], _i);
         }
     }
+    // sbtodo
     
     static processTexture = function(texture, index) {
     }

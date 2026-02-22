@@ -1,4 +1,5 @@
 ortho = false;
+use_fov = true;
 if(os_type == os_gxgames) {
     room_width = window_get_width();
     room_height = window_get_height();    
@@ -29,12 +30,23 @@ cam = camera_create();
 
 viewmat = undefined;
 projmat = undefined;
-zfar = 32000;
-fieldOfView = 30;
-fova = dsin(fieldOfView / 2);
+fieldOfView = 60;
 
-cpos = -(room_height / 2) / fova;
-znear = room_height;
+fova = dsin(fieldOfView / 2);
+//cpos = -( (room_width * (1/1.11803398875)) / 2);
+cpos = -( virtual_width  / 2);
+ cpos = -1247.125 / virtual_scale;
+
+
+
+if(use_fov) {
+    znear = virtual_height / 4;    
+} else {
+    znear = virtual_height;
+}
+
+znear = 1;
+zfar = 32000;
 
 view_set_camera(view, cam);
 if(ortho) {
@@ -49,15 +61,19 @@ if(ortho) {
                                      0,   1,   0);
     
     viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos, 
-                                   lookat_x, lookat_y,   0, 
+                                   lookat_x, lookat_y,   cpos + 64, 
                                     0,    1,   0);
 /*    
     viewmat = matrix_build_lookat( lookat_x, lookat_y, 0, 
                                     lookat_x, lookat_y, 2700, 
                                     0,    1,   0);
 */    
-    projmat = matrix_build_projection_perspective_fov(fieldOfView, room_width / room_height, znear, zfar);
-    projmat = matrix_build_projection_perspective(room_width, room_height, znear, zfar);
+    if(use_fov) {
+        projmat = matrix_build_projection_perspective_fov(fieldOfView, room_width / room_height, znear, zfar);
+        
+    } else {
+        projmat = matrix_build_projection_perspective(room_width, room_height, znear, zfar);
+    }
 }
 
 camera_set_view_mat(cam, viewmat);

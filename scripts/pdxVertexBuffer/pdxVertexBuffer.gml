@@ -1,6 +1,7 @@
 vbuf_show_debug = false;
 vbuf_format_show_debug = true;
 vbuf_color_show_debug = false;
+vbuf_texcoord_show_debug = true;
 triCount = 0;
 
 /// @description Aa Abstract Vertex Buffer
@@ -174,7 +175,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
                 var tex = gltf.accessorData[attribs.texcoord[0]].getValue(index);
                 if(!is_undefined(tex)) {
                     vertex_texcoord(buf, tex.u, tex.v);
-                    if(global.vbuf_show_debug) {
+                    if(global.vbuf_show_debug || global.vbuf_texcoord_show_debug) {
                         show_debug_message("Set texcoord to " + string(tex));
                     }
                 }
@@ -294,8 +295,9 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
         if(!is_undefined(self.vertexData)) {
             if(1) {
                 if(self.vertexSize == 373995 ) {
-                    vertex_submit(self.vertexData, pr_trianglelist, sprite_get_texture(Image_3, 0));
-                    
+                    vertex_submit(self.vertexData, pr_trianglelist, -1 /*sprite_get_texture(Image_3, 0) */);
+                } else if(self.vertexSize == 166180 ) {
+                    vertex_submit(self.vertexData, pr_trianglelist, sprite_get_texture(Image_1, 0));
                 } else {
                     vertex_submit(self.vertexData, pr_trianglelist, -1);
                 } 

@@ -32,11 +32,14 @@ var _fn = "Models/textured_1k_cube/glTF-Binary/textured_1k_cube.glb";
 //_fn = "NonFree/dice.glb";
 //_fn = "NonFree/squirrel.glb";
 
-_fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 //_fn = "Models/watchtower/glTF-Binary/watchtower.glb";
 //_fn = "Models/door-rotate-square-a/glTF-Binary/door-rotate-square-a.glb";
 _fn = "NonFree/d12.glb";
+_fn = "Models/uvcube/glTF-Binary/uvcube.glb";
+_fn = "Models/uvcube/glTF/uvcube.gltf";
+_fn = "NonFree/d6.glb";
+
 //_fn = "NonFree/d20.glb";
 //_fn = "NonFree/dice.glb";
 //_fn = "gltf-samples/Models/CarConcept/glTF/CarConcept.gltf";
