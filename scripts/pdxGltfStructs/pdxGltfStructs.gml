@@ -920,7 +920,7 @@ function pdxGltfDataMaterial() : pdxGltfDataAbstractBase() constructor {
         return col;
     }
 
-    static getBaseTexture = function() {
+    static getBaseColorTexture = function() {
         var tex = undefined;
         
         if(!is_undefined(self.pbrMetallicRoughness)) {

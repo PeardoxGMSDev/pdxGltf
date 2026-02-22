@@ -228,6 +228,24 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
             } else {
                 self.critical("set material color failed");
             }
+            var tex = gltf.materialData[primitive.material].getBaseColorTexture();
+            if(!is_undefined(tex) && !is_undefined(tex.index)) {
+                if(tex.index < array_length(gltf.textureData)) {
+                    var img = gltf.textureData[tex.index].image;
+                    if(!is_undefined(img) && !is_undefined(img.texturegroup_name) && !is_undefined(img.sprite_name)) {
+                        var tex_array = texturegroup_get_sprites(img.texturegroup_name);
+                        for (var i = 0; i < array_length(tex_array); ++i) {
+                            if(sprite_get_name(tex_array[i]) == img.sprite_name) {
+                                self.vertexImage = tex_array[i];
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    
+                }
+            }
         }
     }
 
@@ -294,10 +312,8 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
     static submit = function() {
         if(!is_undefined(self.vertexData)) {
             if(1) {
-                if(self.vertexSize == 373995 ) {
-                    vertex_submit(self.vertexData, pr_trianglelist, -1 /*sprite_get_texture(Image_3, 0) */);
-                } else if(self.vertexSize == 166180 ) {
-                    vertex_submit(self.vertexData, pr_trianglelist, sprite_get_texture(Image_1, 0));
+                if(!is_undefined(self.vertexImage)) {
+                    vertex_submit(self.vertexData, pr_trianglelist, sprite_get_texture(self.vertexImage, 0));
                 } else {
                     vertex_submit(self.vertexData, pr_trianglelist, -1);
                 } 
