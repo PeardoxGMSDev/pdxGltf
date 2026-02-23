@@ -14,10 +14,7 @@ rot = 0;
 do_draw = true;
 
 
-// display_set_timing_method(tm_systemtiming);
-
-// 
-// show_debug_overlay(true);
+ show_debug_overlay(true);
 
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
@@ -42,8 +39,9 @@ _fn = "NonFree/d6.glb";
 _fn = "Models/uvcube/glTF-Binary/uvcube.glb";
 // _fn = "Models/uvcube/glTF/uvcube.gltf";
 // _fn = "NonFree/dice/d6.gltf";
-// _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
-
+ _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
+_fn = "Models/textured_1k_cube/glTF/textured_1k_cube.gltf";
+_fn = "Models/textured_1k_cube/glTF/textured_1k_cube-missingXPlus.gltf";
 //_fn = "NonFree/d20.glb";
 //_fn = "NonFree/dice.glb";
 //_fn = "gltf-samples/Models/CarConcept/glTF/CarConcept.gltf";

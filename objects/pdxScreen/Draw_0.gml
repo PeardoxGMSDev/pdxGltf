@@ -4,7 +4,7 @@ if(amodel && do_draw) {
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
     // draw_clear(c_black);
-    //shader_set(khr_unlit_vertex);
+    // shader_set(khr_unlit_vertex);
     
     var transform1, transform2, transform3;    
     

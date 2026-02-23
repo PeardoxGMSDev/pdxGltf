@@ -153,8 +153,7 @@ if(amodel) {
 
 draw_text(20, display_get_gui_height() - 200, "world_to_screen(0,0,0) = " + string(world_to_screen(0,0,0)));
 
-draw_text(20, display_get_gui_height() - 160, "fov = " + string_format(fieldOfView, 0, 9) + ", cpos = " + string(cpos) + ", znear = " + string(znear) + ", zfar = " + string(zfar));
-
+draw_text(20, display_get_gui_height() - 160, "fov = " + string_format(fieldOfView, 0, 9) + ", Cam = { " + string(lookat_x )  + ", " + string(lookat_y ) + ", " + string(cpos) + " }, znear = " + string(znear) + ", zfar = " + string(zfar));
 draw_text(20, display_get_gui_height() - 120, "viewmat = " + string(viewmat));
 draw_text(20, display_get_gui_height() - 100, "projmat = " + string(projmat));
 draw_text(20, display_get_gui_height() -  60, "world matrix      = " + string(matrix_get(matrix_world)));

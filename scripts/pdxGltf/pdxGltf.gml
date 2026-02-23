@@ -681,14 +681,12 @@ function pdxGLTFBase(): pdxModelFile() constructor {
                     if(!is_undefined(img.bufferView)) {
                         if(self.counts.bufferViews > img.bufferView) {
                             var view = self.data.bufferViews[img.bufferView];
-                            
                             if(newTexture.image.load_from_buffer(self.bufferData[view.buffer], view.byteOffset, view.byteLength)) {
-                                
                                 self.textureData[index] = newTexture;
                             }
                         }
                     } else if(!is_undefined(img.uri)) {
-                        if(newTexture.image.load_frome_file(img.uri)) {
+                        if(newTexture.image.load_frome_file(self.filepath + img.uri)) {
                             self.textureData[index] = newTexture;
                         }
                     }
