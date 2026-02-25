@@ -1,7 +1,7 @@
 vbuf_show_debug = false;
-vbuf_format_show_debug = true;
+vbuf_format_show_debug = false;
 vbuf_color_show_debug = false;
-vbuf_texcoord_show_debug = true;
+vbuf_texcoord_show_debug = false;
 triCount = 0;
 
 /// @description Aa Abstract Vertex Buffer

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pdxCamera",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pdxCamera",
+  "parent":{
+    "name":"pdx",
+    "path":"folders/pdx.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,5 +1,5 @@
 ortho = false;
-use_fov = true;
+
 if(os_type == os_gxgames) {
     room_width = window_get_width();
     room_height = window_get_height();    
@@ -27,53 +27,37 @@ if(_current_cam != -1) {
     camera_destroy(_current_cam);
 }
 cam = camera_create();
-ysign = -1;
+// ysign = -1;
 viewmat = undefined;
 projmat = undefined;
 fieldOfView = 30;
 
-fieldOfView = clamp(fieldOfView, 0.1, 145);
+fieldOfView = clamp(fieldOfView, 0.01, 135);
 
-cpos = ysign * ( virtual_height / 2) / dtan((fieldOfView) / 2);
- cpos += 100;
-//cpos = ( virtual_height / 2) / dtan((fieldOfView) / 2);
-
-
-znear = clamp(abs(cpos / 100), 1, 10000);
-zfar = clamp(abs(cpos * 100), 1, 6400000);
+//cpos = ysign * ( virtual_height / 2) / dtan((fieldOfView) / 2);
+// cpos += 100;
 
 view_set_camera(view, cam);
 if(ortho) {
-    viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
-//  _viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, 0, lookat_x, lookat_y, 1, 0, 0);
-//    _viewmat = matrix_build_lookat(lookat_x, -1000, lookat_y, lookat_x, 0, lookat_y, 0, 0, 1);
-    projmat = matrix_build_projection_ortho(virtual_width, virtual_height, 1, zfar);
+    cpos = ( -virtual_height / 2) ;
+    cam_offset = 0;
+    znear = 1;
+    zfar = 32000;
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                lookat_x, lookat_y, 0,
+                                    0,    1,   0);
+//    viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
+    projmat = matrix_build_projection_ortho(virtual_width, virtual_height, znear, zfar);
     
 } else {
-    /*
-    viewmat = matrix_build_lookat(   0,   0,   0, 
-                                    250, 250, 250, 
-                                     0,   1,   0);
-    
-    viewmat = matrix_build_lookat( lookat_x, lookat_y, lookat_y,// cpos, 
-                                   0,    0,   0, // lookat_x, lookat_y,   cpos + 64, 
-                                    0,    1,   0);
-    
-   
-    viewmat = matrix_build_lookat( lookat_x, lookat_y, 0, 
-                                    lookat_x, lookat_y, 2700, 
-                                    0,    1,   0);
-*/    
-    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos, 
-                                   lookat_x, lookat_y, 0, // cpos + (-ysign * 64), 
-                                    0,    1,   0);
-    if(use_fov) {
-        projmat = matrix_build_projection_perspective_fov((-ysign * fieldOfView), room_width / room_height, znear, zfar);
-//        projmat = matrix_build_projection_perspective_fov(fieldOfView, room_width / room_height, znear, zfar);
-        
-    } else {
-        projmat = matrix_build_projection_perspective(room_width, room_height, znear, zfar);
-    }
+        cpos = ( -virtual_height / 2) / dtan((fieldOfView) / 2);
+        cam_offset = 0;
+        znear = abs(cpos / 10);
+        zfar = abs(cpos * 50);
+        viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                       lookat_x, lookat_y, 0,
+                                        0,    -1,   0);
+        projmat = matrix_build_projection_perspective_fov(-fieldOfView, virtual_width / virtual_height, znear, zfar);
 }
 
 camera_set_view_mat(cam, viewmat);

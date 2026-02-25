@@ -52,6 +52,9 @@ function pdxGltfDataValue(valueCount, elementType = gltfComponentType.UNKNOWN) :
     }      
     
     static check_buffer = function(buffer, view, localOffset) {
+        if(!buffer_exists(buffer)) {
+            return false;
+        }
         if(view.byteLength < (self.readSize * self.elementLength * self.valueLength)) {
             return false;
         }

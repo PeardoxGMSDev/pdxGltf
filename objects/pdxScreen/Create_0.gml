@@ -10,7 +10,9 @@ tfps = 0;
 nfps = 0;
 gui_mode = 0;
 show_detail = 0;
-rot = 0;
+rotX = 0;
+rotY = 0;
+rotZ = 0;
 do_draw = true;
 
 
@@ -35,17 +37,21 @@ _fn = "Models/uvcube/glTF-Binary/uvcube.glb";
 _fn = "Models/uvcube/glTF/uvcube.gltf";
 _fn = "NonFree/d12.glb";
 _fn = "NonFree/d20.glb";
-_fn = "NonFree/d6.glb";
-_fn = "Models/uvcube/glTF-Binary/uvcube.glb";
 // _fn = "Models/uvcube/glTF/uvcube.gltf";
 // _fn = "NonFree/dice/d6.gltf";
  _fn = "Models/ShadedCube/glTF/ShadedCube.gltf";
 _fn = "Models/textured_1k_cube/glTF/textured_1k_cube.gltf";
 _fn = "Models/textured_1k_cube/glTF/textured_1k_cube-missingXPlus.gltf";
+_fn = "NonFree/d6.glb";
+_fn = "Models/uvcube/glTF-Binary/uvcube.glb";
+_fn = "Models/uvcube/glTF-JPEG/uvcube.gltf";
+// _fn = "Models/uvcube/glTF/uvcube.gltf";
+
+ // _fn = "gltf-samples/Models/Sponza/glTF/Sponza.gltf";
+//_fn = "NonFree/Druid.glb";
 //_fn = "NonFree/d20.glb";
 //_fn = "NonFree/dice.glb";
 //_fn = "gltf-samples/Models/CarConcept/glTF/CarConcept.gltf";
-// _fn = "Models/Skeleton_Mage/Skeleton_Mage.glb"; 
 // _fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
 // _fn = "gltf-samples/Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 // _fn = "Models/Dispatcher/glTF-Binary/Dispatcher.glb";
@@ -77,7 +83,7 @@ if(amodel) {
 
 // files = findModels(wd + "glb");
 
-instance_create_depth(1,1,0,testImage);
+// instance_create_depth(1,1,0,testImage);
 
 var _fp_root = layer_get_flexpanel_node("UILayer_1");
 flexpanel_calculate_layout(_fp_root, 2560, 1440, flexpanel_direction.LTR);

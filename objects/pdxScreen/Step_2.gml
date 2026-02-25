@@ -30,11 +30,27 @@ if(InputPressed(INPUT_VERB.QUIT)) {
 }
 
 if(InputCheck(INPUT_VERB.UP)) {
-    rot++;
+    rotX++;
 }
     
 if(InputCheck(INPUT_VERB.DOWN)) {
-    rot--;
+    rotX--;
+}
+
+if(InputCheck(INPUT_VERB.LEFT)) {
+    rotY--;
+}
+    
+if(InputCheck(INPUT_VERB.RIGHT)) {
+    rotY++;
+}
+
+if(InputCheck(INPUT_VERB.IN)) {
+    rotZ--;
+}
+    
+if(InputCheck(INPUT_VERB.OUT)) {
+    rotZ++;
 }
 // Feather use all
 

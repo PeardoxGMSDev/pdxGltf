@@ -13,6 +13,25 @@ function exception_handler(except) {
 function init() {
 }
 
+function byteToHexDigit(byte) {
+    if(byte < 10) {
+        return chr(byte + 48);
+    }
+    if(byte < 17) {
+        return chr(byte + 55);
+    }
+    throw("Invalud hex digit for conversion");
+}
+
+function intToHex(value, bytes = 4) {
+    var res = "";
+    for(var i=0; i< bytes; i++) {
+        res += byteToHexDigit(value & 0x0f);
+        value = value >> 4;
+    }
+    return res;
+}
+
 function TextToFile(text, fname) {
     if(file_exists(fname)) {
         return;

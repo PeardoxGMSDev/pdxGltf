@@ -8,14 +8,11 @@ if(amodel && do_draw) {
     
     var transform1, transform2, transform3;    
     
-    if(ortho) {
-        transform1 = matrix_build(lookat_x,lookat_y,0, 0, rot,0, 240,240,240);
-    } else {
-        transform1 = matrix_build(lookat_x,lookat_y,0, 0, rot,0, 248,248,248);
-    }
+    transform1 = matrix_build(lookat_x,lookat_y,0, -rotX, -rotY, -rotZ, 248,248,248);
+    //transform1 = matrix_build(lookat_x,lookat_y,0, -70, 45, 0, 0.5, 0.5, 0.5 );
     matrix_set(matrix_world, transform1);
     amodel.render();
- 
+/* 
     if(ortho) {
         transform2 = matrix_build(lookat_x - (lookat_x * (2 / 3)),lookat_y,0, 0, 0, rot, 240,240,240);
     } else {
@@ -31,7 +28,7 @@ if(amodel && do_draw) {
     }
     matrix_set(matrix_world, transform3);
     amodel.render();
-    
+*/    
     var identity = matrix_build_identity();
     matrix_set(matrix_world, identity);
     

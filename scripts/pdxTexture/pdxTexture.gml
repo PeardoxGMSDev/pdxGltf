@@ -1,6 +1,7 @@
 enum imageFile {
     UNKNOWN,
-    PNG
+    PNG,
+    JPG
 }
 
 enum imageColourType {
@@ -9,12 +10,14 @@ enum imageColourType {
     RGB = 2,
     PALETTE = 3,
     GREYSCALE_ALPHA = 4,
-    RGBA = 6
+    RGBA = 6,
+    CMYK = 9 // Just for JPEG
 }
 
 imgMagic = [
     [0],                                                // UNKNOWN - Dummy value
-    [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]    // PNG - https://www.w3.org/TR/REC-png-961001#R.PNG-file-signature
+    [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],   // PNG - https://www.w3.org/TR/REC-png-961001#R.PNG-file-signature
+    [0xFF, 0xD8]                                        // JPG - https://en.wikipedia.org/wiki/List_of_file_signatures
     ];
 
 function byteSwap32(value) {
@@ -22,6 +25,12 @@ function byteSwap32(value) {
            ((value & 0x00FF0000) >>  8) |
            ((value & 0x0000FF00) <<  8) |
            ((value & 0x000000FF) << 24);
+    
+}
+
+function byteSwap16(value) {
+    return ((value & 0xFF00) >> 8) |
+           ((value & 0x00FF) << 8);
     
 }
 
@@ -59,12 +68,12 @@ function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width,
         return { chkLen: byteSwap32(buffer_peek(buffer, pos, buffer_u32)), chkTyp: buffer_peek(buffer, pos + 4, buffer_u32) };
     }
     
-    static extractImageInfo = function(buffer, buffer_offset, preValidated = false) {
+    static extractImageInfo = function(buffer, buffer_offset, buffer_length, preValidated = false) {
         if(!preValidated && !validateMagic(buffer, buffer_offset, global.imgMagic[imageFile.PNG])) {
             return;
         }
         
-        var len = buffer_get_size(buffer);
+        var len = buffer_length;
         var pos = buffer_offset + 8; // Start directly after magic
         // There are 12 required bytes of header so make sure we've got enough buffer left
         while((pos + 12) < len) {
@@ -91,6 +100,111 @@ function pdxImageDimensionsPNG(width = 0, height = 0): pdxImageDimensions(width,
             pos += chk.chKLen + 12; 
         }
     }
+}
+
+function pdxImageDimensionsJPG(width = 0, height = 0): pdxImageDimensions(width, height) constructor {
+    static find_next_marker = function(buffer, pos, buffer_length) {
+        var cpos = pos;
+        while(cpos < buffer_length - 1) {
+            if(buffer_peek(buffer, cpos, buffer_u8)  == 0xFF) {
+                var byte = buffer_peek(buffer, cpos+1, buffer_u8);
+                // Skip over filler FF....00
+                if(byte == 0xFF) {
+                    cpos+=2;
+                    while((cpos < buffer_length - 1) && (buffer_peek(buffer, cpos, buffer_u8)  == 0xFF)) {
+                        cpos++;
+                    }
+                    if(buffer_peek(buffer, cpos, buffer_u8)  == 0x00) {
+                        cpos++;
+                        continue;
+                    }
+                }
+                break; 
+                
+            }
+            cpos++;
+        }
+        
+        if(cpos >= buffer_length) {
+            cpos = 0;
+        }
+        
+        return cpos;
+        
+    }
+    
+    static extractImageInfo = function(buffer, buffer_offset, buffer_length, preValidated = false) {
+        if(!preValidated && !validateMagic(buffer, buffer_offset, global.imgMagic[imageFile.JPG])) {
+            return;
+        }
+        
+        var len = buffer_length;
+        var pos = buffer_offset + 2; // Start directly after magic
+        // There are 12 required bytes of header so make sure we've got enough buffer left
+        while((pos < len)) {
+            pos = self.find_next_marker(buffer, pos, buffer_length);
+            var mark = buffer_peek(buffer, pos, buffer_u16);
+            var hex = intToHex(mark);
+            switch(mark) {
+                case 0xDAFF:
+                    break;
+                case 0xD9FF:
+                    break;
+                case 0xC0FF: 
+                case 0xC1FF: 
+                case 0xC2FF: 
+                case 0xC3FF: 
+                case 0xC5FF: 
+                case 0xC6FF: 
+                case 0xC7FF: 
+                case 0xC9FF: 
+                case 0xCAFF: 
+                case 0xCBFF:
+                case 0xCDFF:
+                case 0xCEFF:
+                case 0xCFFF:
+                    var data = buffer_peek(buffer, pos + 2, buffer_u16);
+                    var data_length = byteSwap16(data);
+                    if(data_length<8) {
+                        return;
+                    }
+                    var bits = buffer_peek(buffer, pos + 4, buffer_u8);
+                    var height = byteSwap16(buffer_peek(buffer, pos + 5, buffer_u16));
+                    var width = byteSwap16(buffer_peek(buffer, pos + 7, buffer_u16));
+                    var comps = buffer_peek(buffer, pos + 9, buffer_u8);
+                    
+                    self.width = width;
+                    self.height = height;
+                    self.colourDepth = bits;
+                    switch(comps) {
+                        case 1:
+                            self.colourType = imageColourType.GREYSCALE;
+                            break;
+                        case 3:
+                            self.colourType = imageColourType.RGB;
+                            break;
+                        case 4:
+                            self.colourType = imageColourType.CMYK;
+                            break;
+                        default:
+                            self.colourType = imageColourType.UNKNOWN;
+                            break;
+                    }
+                                    
+                    // show_debug_message("StartOfFrame");
+                    return; 
+                case 0xC4FF: 
+                case 0xC8FF: 
+                case 0xCCFF:
+                    break;
+                default:
+                    break;
+                }
+            
+                pos += 2;
+            }
+        
+    } 
 }
 
 function pdxImage() : pdxException() constructor {
@@ -189,7 +303,11 @@ function pdxImage() : pdxException() constructor {
                 break;
             case imageFile.PNG:
                 self.sprite_size = new pdxImageDimensionsPNG();
-                self.sprite_size.extractImageInfo(inbuf, buffer_offset, true);
+                self.sprite_size.extractImageInfo(inbuf, buffer_offset, buffer_length, true);
+                break;
+            case imageFile.JPG:
+                self.sprite_size = new pdxImageDimensionsJPG();
+                self.sprite_size.extractImageInfo(inbuf, buffer_offset, buffer_length, true);
                 break;
             default:
                 self.sprite_size = new pdxImageDimensions(0, 0);
