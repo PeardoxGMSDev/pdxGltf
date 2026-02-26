@@ -1,6 +1,7 @@
 
 if(amodel && do_draw) {
         //rot += 1;
+
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
     // draw_clear(c_black);
@@ -20,15 +21,8 @@ if(amodel && do_draw) {
     }
     matrix_set(matrix_world, transform2);
     amodel.render();
-    
-    if(ortho) {
-        transform3 = matrix_build(lookat_x + (lookat_x * (2 / 3)),lookat_y,0, rot, 0, 0, 240,240,240);
-    } else {
-        transform3 = matrix_build(lookat_x + (lookat_x * (2 / 3)),lookat_y,0, rot, 0, 0, 240,240,240);
-    }
-    matrix_set(matrix_world, transform3);
-    amodel.render();
 */    
+
     var identity = matrix_build_identity();
     matrix_set(matrix_world, identity);
     

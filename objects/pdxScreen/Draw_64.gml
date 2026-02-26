@@ -145,7 +145,7 @@ if(amodel) {
 
 }
 
-draw_text(20, display_get_gui_height() - 200, "world_to_screen(0,0,0) = " + string(world_to_screen(0,0,0)));
+draw_text(20, display_get_gui_height() - 200, "Roll = " + string(Roll) + ", Up = { " + string(upDir.x) + ", " + string(upDir.y) + ", " + string(upDir.z) + " }");
 if(ortho) {
     draw_text(20, display_get_gui_height() - 160, "Cam = { " + string(lookat_x )  + ", " + string(lookat_y ) + ", " + string(cpos) + " }, znear = " + string(znear) + ", zfar = " + string(zfar) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
 } else {

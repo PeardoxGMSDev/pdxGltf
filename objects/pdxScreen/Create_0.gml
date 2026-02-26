@@ -13,6 +13,8 @@ show_detail = 0;
 rotX = 0;
 rotY = 0;
 rotZ = 0;
+Roll = 0;
+Pitch = 0;
 do_draw = true;
 
 
@@ -64,11 +66,11 @@ wd = working_directory;
 // _fn = "SimpleSparseAccessor/glTF/SimpleSparseAccessor.gltf"; 
 // wd = "C:\\git\\glTF-Sample-Assets\\Models\\";
 
-model_file = wd + _fn;
-amodel = openModel(model_file);
+//model_file = wd + _fn;
+//amodel = openModel(model_file);
 // amodel.critical("Quit?")
 
-//amodel = openModel(working_directory + _fn);
+amodel = openModel(wd + _fn);
 if(amodel) {
     amodel.read();
     amodel.process();

@@ -1,4 +1,5 @@
 ortho = false;
+upDir = new pdxVec3();
 
 if(os_type == os_gxgames) {
     room_width = window_get_width();
@@ -34,30 +35,35 @@ fieldOfView = 30;
 
 fieldOfView = clamp(fieldOfView, 0.01, 135);
 
-//cpos = ysign * ( virtual_height / 2) / dtan((fieldOfView) / 2);
-// cpos += 100;
-
 view_set_camera(view, cam);
 if(ortho) {
     cpos = ( -virtual_height / 2) ;
     cam_offset = 0;
     znear = 1;
     zfar = 32000;
+    Roll = 0;
+    Pitch = 0;
+    upDir.x = dsin(Roll);
+    upDir.y = dcos(Roll);
     viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
-                                lookat_x, lookat_y, 0,
-                                    0,    1,   0);
+                                   lookat_x, lookat_y, 0,
+                                   upDir.x,    upDir.y,   upDir.z);
 //    viewmat = matrix_build_lookat(lookat_x, lookat_y, -1000, lookat_x, lookat_y, 0, 0, 1, 0);
     projmat = matrix_build_projection_ortho(virtual_width, virtual_height, znear, zfar);
     
 } else {
-        cpos = ( -virtual_height / 2) / dtan((fieldOfView) / 2);
-        cam_offset = 0;
-        znear = abs(cpos / 10);
-        zfar = abs(cpos * 50);
-        viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
-                                       lookat_x, lookat_y, 0,
-                                        0,    -1,   0);
-        projmat = matrix_build_projection_perspective_fov(-fieldOfView, virtual_width / virtual_height, znear, zfar);
+    cpos = ( -virtual_height / 2) / dtan((fieldOfView) / 2);
+    cam_offset = 0;
+    znear = abs(cpos / 10);
+    zfar = abs(cpos * 50);
+    Roll = 180;
+    Pitch = 0;
+    upDir.x = dsin(Roll);
+    upDir.y = dcos(Roll);
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                lookat_x, lookat_y, 0,
+                                upDir.x,    upDir.y,   upDir.z);
+    projmat = matrix_build_projection_perspective_fov(-fieldOfView, virtual_width / virtual_height, znear, zfar);
 }
 
 camera_set_view_mat(cam, viewmat);

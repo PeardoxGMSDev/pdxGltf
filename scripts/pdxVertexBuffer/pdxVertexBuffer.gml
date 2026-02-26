@@ -165,7 +165,7 @@ function pdxGltfVertexBuffer(): pdxVertexBuffer() constructor {
             if(attribs.NORMAL != undefined) {
                 var norm = gltf.accessorData[attribs.NORMAL].getValue(index);
                 if(!is_undefined(norm)) {
-                    vertex_normal(buf, norm.x, norm.y, norm.z);
+                    vertex_normal(buf, norm.x, -norm.y, -norm.z);
                     if(global.vbuf_show_debug) {
                         show_debug_message("Set normal to " + string(norm));
                     }

@@ -52,6 +52,56 @@ if(InputCheck(INPUT_VERB.IN)) {
 if(InputCheck(INPUT_VERB.OUT)) {
     rotZ++;
 }
+
+if(InputCheck(INPUT_VERB.RESET)) {
+    rotX = 0;
+    rotY = 0;
+    rotZ = 0;
+    Pitch = 0;
+    if(ortho) {
+        Roll = 0;
+    } else {
+        Roll = 180;
+    }
+    upDir.x = dsin(Roll);
+    upDir.y = dcos(Roll);
+    upDir.z = 0;
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                lookat_x, lookat_y, 0,
+                                upDir.x,    upDir.y,   upDir.z);
+    camera_set_view_mat(cam, viewmat);
+}
+
+if(InputCheck(INPUT_VERB.ROLL_LEFT)) {
+    Roll++;
+    if(Roll >= 360) {
+        Roll -= 360;
+    }
+    upDir.x = dsin(Roll);
+    upDir.y = dcos(Roll);
+    upDir.z = 0;
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                lookat_x, lookat_y, 0,
+                                upDir.x,    upDir.y,   upDir.z);
+    camera_set_view_mat(cam, viewmat);
+}
+
+if(InputCheck(INPUT_VERB.ROLL_RIGHT)) {
+    Roll--;
+    if(Roll < 0) {
+        Roll += 360;
+    }
+    upDir.x = dsin(Roll);
+    upDir.y = dcos(Roll);
+    upDir.z = 0;
+    viewmat = matrix_build_lookat( lookat_x, lookat_y, cpos + cam_offset, 
+                                lookat_x, lookat_y, 0,
+                                upDir.x,    upDir.y,   upDir.z);
+    camera_set_view_mat(cam, viewmat);
+}
+
+
+
 // Feather use all
 
 
