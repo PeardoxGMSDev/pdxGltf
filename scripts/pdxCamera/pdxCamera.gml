@@ -1,9 +1,14 @@
+enum CAMERA_TYPE {
+    ORTHOGRAPHIC,
+    PERSPECTIVE
+}
+
 function pdxVec2(x = 0, y=0) constructor {
     self.x = x;
     self.y = y;    
 }
 
-function pdxVec3(x = 0, y=0, z=0) : pdxVec2(x = 0, y=0) constructor {
+function pdxVec3(x = 0, y=0, z=0) : pdxVec2(x, y) constructor {
     self.z = z;
 }
 
@@ -36,11 +41,133 @@ function pdxVirtualScreenRect() : pdxScreenRect() constructor {
     self.scale = 1;
 }
 
+function pdxCameraPos(x=0, y=0, z=0) : pdxVec3(x, y, z) constructor {
+    
+}
+
+function pdxFocalPlane() : pdxScreenRect() constructor {
+    self.left = 0;
+    self.top = 0;
+    self.depth = 0;
+    
+    static setOrigin = function(left, top) {
+        self.left = left;
+        self.top = top;
+    }
+    
+    static getHalfHeight = function() {
+        return self.height / 2;
+    }
+    
+    static getHalfWidth = function() {
+        return self.width / 2;
+    }
+    
+    static getHeight = function() {
+        return self.height;
+    }
+    
+    static getWidth = function() {
+        return self.width;
+    }
+    
+    static getFocalPoint = function() {
+        return new pdxVec3( self.left + (self.width / 2), self.top + (self.height / 2), self.depth );
+    }    
+}
+
 function pdxCamera() constructor {
     self.cameraId = undefined;
-    self.position = new pdxVec3();
-    self.direction = new pdxVec3();
+    self.viewId = undefined;
+    self.cameraType = CAMERA_TYPE.PERSPECTIVE;
+    self.changed = false;
+    self.fieldOfView = 60;
+    self.cameraPos = new pdxCameraPos();
+    self.offset = new pdxVec3();
+    self.focalPlane = new pdxFocalPlane();
+    self.upDir = new pdxVec3();
+    self.znear = 1;
+    self.zfar = 32000;
+    self.viewmat = undefined;
+    self.projmat = undefined;
+    self.Roll = 0;
+    self.Pitch = 0;
+    self.Azimuth = 0;
 
+    static init = function(viewId, width, height, cameraType = CAMERA_TYPE.ORTHOGRAPHIC, originX = 0, originY = 0, fieldOfView = 60) {
+        if((cameraType != CAMERA_TYPE.PERSPECTIVE) && (cameraType != CAMERA_TYPE.ORTHOGRAPHIC)) {
+            return false;
+        }
+        if((fieldOfView <= 0) || (fieldOfView >= 135)) {
+            return false;
+        }
+        if((width <= 0) || (height <= 0)) {
+            return false;
+        }
+        if((viewId < 0) || (viewId > 7)) {
+            return false;
+        }
+        
+        self.viewId = viewId;
+        self.focalPlane.setOrigin(originX, originY);
+        self.focalPlane.setSize(width, height);
+        self.cameraId = camera_create();
+        self.cameraType = cameraType;
+        self.fieldOfView = fieldOfView;
+        self.offset.x = self.focalPlane.getHalfWidth();
+        self.offset.y = self.focalPlane.getHalfHeight();
+        
+        switch(cameraType) {
+            case CAMERA_TYPE.ORTHOGRAPHIC: 
+                self.Roll = 0;
+                self.cameraPos.z = -self.focalPlane.height;
+                self.znear = 1;
+                self.zfar = 32000;
+                self.upDir.x = dsin(Roll);
+                self.upDir.y = dcos(Roll);
+                
+                self.projmat = matrix_build_projection_ortho(self.focalPlane.width, self.focalPlane.height, self.znear, self.zfar);
+            break;
+            case CAMERA_TYPE.PERSPECTIVE:
+                self.Roll = 180;
+                self.cameraPos.z = -self.focalPlane.getHalfHeight() / dtan((fieldOfView) / 2);
+                self.cameraPos.z += 100;
+                self.znear = abs(self.cameraPos.z / 10);
+                self.zfar = abs(self.cameraPos.z * 50);
+                self.upDir.x = dsin(Roll);
+                self.upDir.y = dcos(Roll);
+                
+                self.projmat = matrix_build_projection_perspective_fov(-fieldOfView, self.focalPlane.aspect, znear, zfar);
+            break;
+        }
+        
+        view_set_camera(self.viewId, self.cameraId);
+        self.changed = true;
+        self.update();
+        camera_set_proj_mat(self.cameraId, self.projmat);
+        view_enabled = true;
+        view_set_visible(self.viewId, true);
+        view_set_wport(self.viewId, self.focalPlane.width);
+        view_set_hport(self.viewId, self.focalPlane.height);
+        view_set_xport(self.viewId, self.focalPlane.left);
+        view_set_yport(self.viewId, self.focalPlane.top);
+        
+        return self;
+        
+    }
+
+    static update = function() {
+        if(self.changed) {
+            // Update everything
+        }
+        var lookAt = self.focalPlane.getFocalPoint(); 
+        self.viewmat = matrix_build_lookat( self.cameraPos.x + self.offset.x, self.cameraPos.y + self.offset.y, self.cameraPos.z + self.offset.z, 
+                                            lookAt.x, lookAt.y, lookAt.z,
+                                            self.upDir.x, self.upDir.y, self.upDir.z);
+        camera_set_view_mat(self.cameraId, self.viewmat);
+        self.changed = false;
+    }
+    
 }
 
 function pdxViewConfig() constructor {
