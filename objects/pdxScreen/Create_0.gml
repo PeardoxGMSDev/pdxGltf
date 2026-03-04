@@ -59,7 +59,7 @@ _fn = "Models/CubeRotateTranslate/glTF/CubeRotateTranslate.gltf";
 // _fn = "gltf-samples/Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 // _fn = "Models/Dispatcher/glTF-Binary/Dispatcher.glb";
 //_fn = "NonFree/dirt_bike.glb";
-//_fn = "NonFree/Dungeon/V1/DungeonV1.gltf";
+// _fn = "NonFree/Dungeon/V1/DungeonV1.gltf";
 
 
 wd = working_directory;

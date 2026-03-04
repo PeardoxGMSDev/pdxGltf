@@ -122,9 +122,9 @@ if(amodel) {
             }
             break;
         case 1:
-            draw_text(20, 80, amodel.tree[0]);
+            draw_text(20, 80, amodel.tree[0].prettyPrint());
             draw_text(800, 80, amodel.tree[1].prettyPrint());
-            // draw_text(1600, 80, string(tv.prettyPrint()));
+//            draw_text(1600, 80, amodel.tree[2].prettyPrint());
 
             break;
         case 2:

@@ -83,7 +83,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.counts.cameras =            self.getCount(self.data, "cameras");
         self.counts.images =             self.getCount(self.data, "images");
     }
-    
+    /*
     static addTreeKeyValue = function(key, object, treeNode) {
         var val = object[$ key];
         if(typeof(val) == "struct") {
@@ -111,7 +111,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }
         
     }
-    
+    */
     static gatherErrors = function() {
         self.errval = false;
         var text = "Assets\n\n";        
@@ -218,10 +218,11 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         return text;
     }
     
+    /*
     static addTreeMesh = function(txt) {
         self.tree[0] += txt;
     }
-
+    */
     static free = function() {
     }
     
@@ -249,100 +250,106 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         return rval;
     }
     
-    static processAttributes = function(attributes, depth = 0) {
+    static processAttributes = function(attributes, treeNode, depth = 0) {
         if(self.keyExists(attributes, "POSITION")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "POSITION : " + string(attributes.POSITION) + "\n");
+            treeNode.addItem("POSITION", attributes.POSITION);
         }
         if(self.keyExists(attributes, "NORMAL")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "NORMAL   : " + string(attributes.NORMAL) + "\n");
+            treeNode.addItem("NORMAL", attributes.NORMAL);
         }
         if(self.keyExists(attributes, "TANGENT")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "TANGENT  : " + string(attributes.TANGENT) + "\n");
+            treeNode.addItem("TANGENT", attributes.TANGENT);
         }
         if(self.keyExists(attributes, "texcoord")) {
             var _al = array_length(attributes.texcoord);
             for(var _i=0; _i< _al; _i++) {
-                self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "TEXCOORD_" + string(_i) + " : " + string(attributes.texcoord[_i]) + "\n");
+                treeNode.addItem("texcoord[" + string(_i) + "]", attributes.texcoord[_i]);
             }
         }
         if(self.keyExists(attributes, "color")) {
             var _al = array_length(attributes.color);
             for(var _i=0; _i< _al; _i++) {
-                self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "COLOR_" + string(_i) + " : " + string(attributes.color[_i]) + "\n");
+                treeNode.addItem("color[" + string(_i) + "]", attributes.color[_i]);
             }
         }
         if(self.keyExists(attributes, "joints")) {
             var _al = array_length(attributes.joints);
             for(var _i=0; _i< _al; _i++) {
-                self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "JOINTS_" + string(_i) + " : " + string(attributes.joints[_i]) + "\n");
+                treeNode.addItem("joints[" + string(_i) + "]", attributes.joints[_i]);
             }
         }
         if(self.keyExists(attributes, "weights")) {
             var _al = array_length(attributes.weights);
             for(var _i=0; _i< _al; _i++) {
-                self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "WEIGHTS_" + string(_i) + " : " + string(attributes.weights[_i]) + "\n");
+                treeNode.addItem("weights[" + string(_i) + "]", attributes.weights[_i]);
             }
         }
         if(self.keyExists(attributes, "extensions")) {
-            self.addTreeMesh(string_repeat(" ", (depth + 1) * TABSIZE) + "extensions : " + string(attributes.extensions) + "\n");
+            treeNode.addItem("extensions", attributes.extensions);
         }    
     }
     
-    static processPrimitive = function(primitive, depth = 0) {
+    static processPrimitive = function(primitive, treeNode, depth = 0) {
         if(self.keyExists(primitive, "attributes")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "Attributes" + "\n");
-            self.processAttributes(primitive.attributes, depth + 1);
+            var leaf = treeNode.addNode("Attributes");
+            self.processAttributes(primitive.attributes, leaf, depth + 1);
         }
         if(self.keyExists(primitive, "indices")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "indices  : " + string(primitive.indices) + "\n");
+            treeNode.addItem("indices", primitive.indices);
         }
         if(self.keyExists(primitive, "material")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "material : " + string(primitive.material) + "\n");
+            treeNode.addItem("material", primitive.material);
         }
         if(self.keyExists(primitive, "mode")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "mode     : " + string(primitive.mode) + "\n");
+            treeNode.addItem("mode", primitive.mode);
         }
         if(self.keyExists(primitive, "targets")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "targets  : " + string(primitive.targets) + "\n");
+            treeNode.addItem("targets", primitive.targets);
         }
         if(self.keyExists(primitive, "extensions")) {
-            self.addTreeMesh(string_repeat(" ", (depth + 1) * TABSIZE) + "extensions : " + string(primitive.extensions) + "\n");
+            treeNode.addItem("extensions", primitive.extensions);
         }    
         array_push(self.primitiveList, primitive);
 //        show_debug_message(json_stringify(primitive));
     }
     
-    static processMesh = function(mesh, depth = 0) {
+    static processMesh = function(mesh, treeNode, depth = 0) {
+        var leaf;
         if(self.keyExists(mesh, "name")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "Mesh : " + mesh.name + "\n");
+            leaf = treeNode.addNode("Mesh : " + mesh.name);
+        } else {
+            leaf = treeNode.addNode("Mesh : <no name>");
         }
         
         if(self.keyExists(mesh, "primitives")) {
             var _al = array_length(mesh.primitives);
             for(var _i = 0; _i < _al; _i++) {
-                self.processPrimitive(mesh.primitives[_i], depth + 1);
+                self.processPrimitive(mesh.primitives[_i], leaf, depth + 1);
             }
         }
         
         if(self.keyExists(mesh, "weights")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "weights : " + string(mesh.weights) + "\n");
+            leaf.addItem("weights", mesh.weights);
             self.addWarning("ToDo : Mesh weights not implemented yet");
         }
         if(self.keyExists(mesh, "extensions")) {
-            self.addTreeMesh(string_repeat(" ", (depth + 1) * TABSIZE) + "extensions : " + string(mesh.extensions) + "\n");
+            leaf.addItem("extensions", mesh.extensions);
         }    
         
         
     }
         
-    static processNode = function(node, depth = 0) {
+    static processNode = function(node, treeNode, depth = 0) {
+        var leaf;
         if(self.keyExists(node, "name")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "Node : " + node.name + "\n");
+            leaf = treeNode.addNode("Node : " + node.name);
+        } else {
+            leaf = treeNode.addNode("Node : <no name>");
         }
         
         if(self.keyExists(node, "mesh")) {
             if(node.mesh < self.counts.meshes) {
-                self.processMesh(self.data.meshes[node.mesh], depth + 1);
+                self.processMesh(self.data.meshes[node.mesh], leaf, depth + 1);
             } else {
                 self.addError("Bad mesh index (" + string(node.mesh) + ")");
             }
@@ -361,51 +368,52 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }
         
         if(self.keyExists(node, "camera")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "camera : " + string(node.camera) + "\n");
+            leaf.addItem("camera", node.camera);
             self.addWarning("ToDo : Node camera not implemented yet");
         }
         
         if(self.keyExists(node, "skin")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "skin : " + string(node.skin) + "\n");
+            leaf.addItem("skin", node.skin);
             self.addWarning("ToDo : Node skin not implemented yet");
         }
         
         if(self.keyExists(node, "matrix")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "matrix : " + string(node.matrix) + "\n");
+            leaf.addItem("matrix", node.matrix);
             self.addWarning("ToDo : Node matrix not implemented yet");
         }
         
         if(self.keyExists(node, "rotation")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "rotation : " + string(node.rotation) + "\n");
+            leaf.addItem("rotation", node.rotation);
             self.addWarning("ToDo : Node rotation not implemented yet : " +  + string(node.rotation));
         }
         
         if(self.keyExists(node, "scale")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "scale : " + string(node.scale) + "\n");
+            leaf.addItem("scale", node.scale);
             self.addWarning("ToDo : Node scale not implemented yet");
         }
         
         if(self.keyExists(node, "translation")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "translation : " + string(node.translation) + "\n");
+            leaf.addItem("translation", node.translation);
             self.addWarning("ToDo : Node translation not implemented yet");
         }
         
         if(self.keyExists(node, "weights")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "weights : " + string(node.weights) + "\n");
+            leaf.addItem("weights", node.weights);
             self.addWarning("ToDo : Node weights not implemented yet");
         }
         
         if(self.keyExists(node, "extensions")) {
-            self.addTreeMesh(string_repeat(" ", (depth + 1) * TABSIZE) + "extensions : " + string(node.extensions) + "\n");
+            leaf.addItem("extensions", node.extensions);
         }    
         
     }    
     
-    static processScene = function(scene, depth = 0) {
+    static processScene = function(scene, treeNode, depth = 0) {
+        var leaf;
         if(self.keyExists(scene, "name")) {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "Scene : " + scene.name + "\n");
+            leaf = treeNode.addNode("Scene : " + scene.name);
         } else {
-            self.addTreeMesh(string_repeat(" ", depth * TABSIZE) + "Scene : <no name>\n");
+            leaf = treeNode.addNode("Scene : <no name>");
         }
 
         if(self.keyExists(scene, "nodes")) {
@@ -413,7 +421,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             for(var _i = 0; _i < _al; _i++) {
                 var _node = scene.nodes[_i];
                 if(_node < self.counts.nodes) {
-                    self.processNode(self.data.nodes[_node], depth + 1);
+                    self.processNode(self.data.nodes[_node], leaf, depth + 1);
                 } else {
                     self.addError("Bad node index (" + string(_node) + ")");
                 }
@@ -511,7 +519,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.keyExists(textureInfo, "texCoord")) {
             treeNode.addItem("texCoord", textureInfo.texCoord);
         }
-        self.addTreeMisc(textureInfo, treeNode);
     }
 
     static processMaterialOcclusionTexture = function(occlusionTexture, treeNode) {
@@ -526,7 +533,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.keyExists(occlusionTexture, "strength")) {
             leaf.addItem("strength", occlusionTexture.strength);
         }
-        self.addTreeMisc(occlusionTexture, treeNode);
     }
     
     static processMaterialNormalTexture = function(normalTexture, treeNode) {
@@ -541,7 +547,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.keyExists(normalTexture, "scale")) {
             leaf.addItem("scale", normalTexture.scale);
         }
-        self.addTreeMisc(normalTexture, treeNode);
     }
 
 /*
@@ -571,7 +576,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             var metalNode = leaf.addNode("metallicRoughnessTexture");
             self.processMaterialTextureInfo(pbrMetallicRoughness.metallicRoughnessTexture, metalNode);
         }
-        self.addTreeMisc(pbrMetallicRoughness, treeNode);
     }
     
     
@@ -611,7 +615,6 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             var emleaf = leaf.addNode("emissiveTexture");
             self.processMaterialTextureInfo(material.emissiveTexture, emleaf);
         }
-        self.addTreeMisc(material, treeNode);
         
         // Todo : Deepcopy
         self.materialData[index] = material;
@@ -778,7 +781,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     static process = function() {
         self.processTime = get_timer();
         self.tree = ["","",""];
-//        self.tree[0] = new pdxWidgetTreeView("Nodes");
+        self.tree[0] = new pdxWidgetTreeView("Scenes");
         self.tree[1] = new pdxWidgetTreeView("Materials");
         
         // Clear primitiveList
@@ -823,7 +826,10 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         // Finally build scene(s)       
         if(self.data.scene < self.counts.scenes) {
             var _scene = self.data.scenes[self.data.scene];
-            self.processScene(_scene);
+            self.processScene(_scene, self.tree[0]);
+            show_debug_message("=======================================================================");
+            show_debug_message(self.tree[0].prettyPrint());
+            show_debug_message("=======================================================================");
         }
         
         // show_debug_message(json_stringify( self.primitiveList ));
