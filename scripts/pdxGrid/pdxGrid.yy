@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pdxGrid",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pdxGrid",
+  "parent":{
+    "name":"pdx",
+    "path":"folders/pdx.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

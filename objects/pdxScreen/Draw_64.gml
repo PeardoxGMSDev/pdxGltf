@@ -146,12 +146,12 @@ if(amodel) {
 }
 
 if(is_instanceof(pcam, pdxCamera)) {
-    draw_text(20, display_get_gui_height() - 200, "Roll = " + string(pcam.Roll) + ", Up = { " + string(pcam.upDir.x) + ", " + string(pcam.upDir.y) + ", " + string(pcam.upDir.z) + " }");
+    draw_text(20, display_get_gui_height() - 200, "Roll = " + string(pcam.roll) + ", Azimuth = " + string(pcam.azimuth) + ", Inclination = " + string(pcam.inclination) + ", Up = { " + string(pcam.upDir.x) + ", " + string(pcam.upDir.y) + ", " + string(pcam.upDir.z) + " }");
 
-if(ortho) {
-    draw_text(20, display_get_gui_height() - 160, "Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
+if(pcam.cameraType == CAMERA_TYPE.ORTHOGRAPHIC) {
+    draw_text(20, display_get_gui_height() - 160, "Orthographic : Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
 } else {
-    draw_text(20, display_get_gui_height() - 160, "fov = " + string_format(pcam.fieldOfView, 0, 9) + ", Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + " }, rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
+    draw_text(20, display_get_gui_height() - 160, "Perspective : FOV = " + string_format(pcam.fieldOfView, 0, 9) + ", Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + " }, rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
 }
 
     draw_text(20, display_get_gui_height() - 120, "viewmat = " + string(pcam.viewmat));

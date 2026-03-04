@@ -1,5 +1,5 @@
 vbuf_show_debug = false;
-vbuf_format_show_debug = false;
+vbuf_format_show_debug = true;
 vbuf_color_show_debug = false;
 vbuf_texcoord_show_debug = false;
 triCount = 0;
@@ -349,6 +349,7 @@ function pdxGltfVertexBufferSet(): pdxException() constructor {
     
     static submit = function() {
         for(var i=0; i<self.count; i++) {
+            // if((i>=8) && (i<=13)) { continue; }
             self.buffers[i].submit();
         }        
         

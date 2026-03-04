@@ -15,13 +15,14 @@ function __InputConfigVerbs()
         MAP,
         IN,
         OUT,
-        ROLL_LEFT,
-        ROLL_RIGHT,
-        PITCH_UP,
-        PITCH_DOWN,
+        ROLLINC,
+        ROLLDEC,
+        INCLINATIONINC,
+        INCLINATIONDEC,
         RESET,
-        AZIMUTH_LEFT,
-        AZIMUTH_RIGHT
+        AZIMUTHINC,
+        AZIMUTHDEC,
+        SWITCHLENS
     }
     
     enum INPUT_CLUSTER
@@ -33,12 +34,12 @@ function __InputConfigVerbs()
     
     InputDefineVerb(INPUT_VERB.IN,      "in",           [vk_pageup,   "Q"], [-gp_axisrh]);
     InputDefineVerb(INPUT_VERB.OUT,     "out",          [vk_pagedown, "E"], [ gp_axisrh]);
-    InputDefineVerb(INPUT_VERB.ROLL_LEFT,  "rollLeft",  [vk_home],          [ gp_shoulderl]);
-    InputDefineVerb(INPUT_VERB.ROLL_RIGHT, "rollRight", [vk_end],           [ gp_shoulderr]);
-    InputDefineVerb(INPUT_VERB.AZIMUTH_LEFT,  "azimuthUp",    [vk_insert],        [ gp_padl]);
-    InputDefineVerb(INPUT_VERB.AZIMUTH_RIGHT, "azimuthDown", [vk_delete],        [ gp_padr]);
-    InputDefineVerb(INPUT_VERB.PITCH_UP,  "pitchUp",    [vk_insert],        [ gp_padu]);
-    InputDefineVerb(INPUT_VERB.PITCH_DOWN, "pitchDown", [vk_delete],        [ gp_padd]);
+    InputDefineVerb(INPUT_VERB.ROLLINC,  "rollLeft",  [vk_home],          [ gp_shoulderl]);
+    InputDefineVerb(INPUT_VERB.ROLLDEC, "rollRight", [vk_end],           [ gp_shoulderr]);
+    InputDefineVerb(INPUT_VERB.AZIMUTHINC,  "azimuthUp",    undefined,        [ gp_padl]);
+    InputDefineVerb(INPUT_VERB.AZIMUTHDEC, "azimuthDown", undefined,        [ gp_padr]);
+    InputDefineVerb(INPUT_VERB.INCLINATIONINC,  "pitchUp",    undefined,        [ gp_padu]);
+    InputDefineVerb(INPUT_VERB.INCLINATIONDEC, "pitchDown", undefined,        [ gp_padd]);
     InputDefineVerb(INPUT_VERB.UP,      "up",           [vk_up,       "W"], [-gp_axislv]);
     InputDefineVerb(INPUT_VERB.DOWN,    "down",         [vk_down,     "S"], [ gp_axislv]);
     InputDefineVerb(INPUT_VERB.LEFT,    "left",         [vk_left,     "A"], [-gp_axislh]);
@@ -48,6 +49,7 @@ function __InputConfigVerbs()
     
 
     InputDefineVerb(INPUT_VERB.ACCEPT, "accept", vk_space, gp_face1);
+    InputDefineVerb(INPUT_VERB.SWITCHLENS, "switchLens", vk_f10, gp_face2);
     InputDefineVerb(INPUT_VERB.RESET, "reset", vk_f5, gp_start);
     InputDefineVerb(INPUT_VERB.QUIT, "quit", vk_escape, gp_select);
 

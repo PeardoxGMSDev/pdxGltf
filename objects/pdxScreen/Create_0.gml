@@ -18,7 +18,7 @@ Pitch = 0;
 do_draw = true;
 
 
- show_debug_overlay(true);
+// show_debug_overlay(true);
 
 // amodel = new pdxGLB();
 //amodel = new pdxGLTF();
@@ -48,6 +48,7 @@ _fn = "NonFree/d6.glb";
 _fn = "Models/uvcube/glTF-Binary/uvcube.glb";
 _fn = "Models/uvcube/glTF-JPEG/uvcube.gltf";
 // _fn = "Models/uvcube/glTF/uvcube.gltf";
+_fn = "Models/CubeRotateTranslate/glTF/CubeRotateTranslate.gltf";
 
  // _fn = "gltf-samples/Models/Sponza/glTF/Sponza.gltf";
 //_fn = "NonFree/Druid.glb";
@@ -57,6 +58,8 @@ _fn = "Models/uvcube/glTF-JPEG/uvcube.gltf";
 // _fn = "NonFree/Gamepad/glTF-Binary/Gamepad.glb";
 // _fn = "gltf-samples/Models/BoxVertexColors/glTF/BoxVertexColors.gltf";
 // _fn = "Models/Dispatcher/glTF-Binary/Dispatcher.glb";
+//_fn = "NonFree/dirt_bike.glb";
+//_fn = "NonFree/Dungeon/V1/DungeonV1.gltf";
 
 
 wd = working_directory;

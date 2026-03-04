@@ -85,14 +85,63 @@ function pdxCamera() constructor {
     self.cameraPos = new pdxCameraPos();
     self.offset = new pdxVec3();
     self.focalPlane = new pdxFocalPlane();
+    self.focalLength = 0;
     self.upDir = new pdxVec3();
     self.znear = 1;
     self.zfar = 32000;
     self.viewmat = undefined;
     self.projmat = undefined;
-    self.Roll = 0;
-    self.Pitch = 0;
-    self.Azimuth = 0;
+    self.roll = 0;
+    self.inclination = 90;
+    self.azimuth = 90;
+    
+    static incAzimuth = function(value = 1) {
+        self.azimuth += value;
+        while(self.azimuth >= 360) {
+            self.azimuth -= 360;
+        }
+        self.changed = true;
+    }
+
+    static decAzimuth = function(value = 1) {
+        self.azimuth -= value;
+        while(self.azimuth < 0) {
+            self.azimuth += 360;
+        }
+        self.changed = true;
+    }
+
+    static incRoll = function(value = 1) {
+        self.roll += value;
+        while(self.roll >= 360) {
+            self.roll -= 360;
+        }
+        self.changed = true;
+    }
+
+    static decRoll = function(value = 1) {
+        self.roll -= value;
+        while(self.roll < 0) {
+            self.roll += 360;
+        }
+        self.changed = true;
+    }
+
+    static incInclination = function(value = 1) {
+        self.inclination += value;
+        if(self.inclination >= 180) {
+            self.inclination = 179.99999;
+        }
+        self.changed = true;
+    }
+
+    static decInclination = function(value = 1) {
+        self.inclination -= value;
+        if(self.inclination <= 0) {
+            self.inclination = 0.00001;
+        }
+        self.changed = true;
+    }
 
     static init = function(viewId, width, height, cameraType = CAMERA_TYPE.ORTHOGRAPHIC, originX = 0, originY = 0, fieldOfView = 60) {
         if((cameraType != CAMERA_TYPE.PERSPECTIVE) && (cameraType != CAMERA_TYPE.ORTHOGRAPHIC)) {
@@ -117,30 +166,8 @@ function pdxCamera() constructor {
         self.offset.x = self.focalPlane.getHalfWidth();
         self.offset.y = self.focalPlane.getHalfHeight();
         
-        switch(cameraType) {
-            case CAMERA_TYPE.ORTHOGRAPHIC: 
-                self.Roll = 0;
-                self.cameraPos.z = -self.focalPlane.height;
-                self.znear = 1;
-                self.zfar = 32000;
-                self.upDir.x = dsin(Roll);
-                self.upDir.y = dcos(Roll);
+        self.reset();
                 
-                self.projmat = matrix_build_projection_ortho(self.focalPlane.width, self.focalPlane.height, self.znear, self.zfar);
-            break;
-            case CAMERA_TYPE.PERSPECTIVE:
-                self.Roll = 180;
-                self.cameraPos.z = -self.focalPlane.getHalfHeight() / dtan((fieldOfView) / 2);
-                self.cameraPos.z += 100;
-                self.znear = abs(self.cameraPos.z / 10);
-                self.zfar = abs(self.cameraPos.z * 50);
-                self.upDir.x = dsin(Roll);
-                self.upDir.y = dcos(Roll);
-                
-                self.projmat = matrix_build_projection_perspective_fov(-fieldOfView, self.focalPlane.aspect, znear, zfar);
-            break;
-        }
-        
         view_set_camera(self.viewId, self.cameraId);
         self.changed = true;
         self.update();
@@ -159,7 +186,16 @@ function pdxCamera() constructor {
     static update = function() {
         if(self.changed) {
             // Update everything
+            
+            self.cameraPos.x = self.focalLength * dcos(self.azimuth);
+            
+            self.cameraPos.y = -self.focalLength * dcos(self.inclination);
+            self.cameraPos.z = self.focalLength * dsin(self.azimuth);
+        //    self.cameraPos.z += 100;
         }
+        self.upDir.x = dsin(self.roll);
+        self.upDir.y = dcos(self.roll);
+
         var lookAt = self.focalPlane.getFocalPoint(); 
         self.viewmat = matrix_build_lookat( self.cameraPos.x + self.offset.x, self.cameraPos.y + self.offset.y, self.cameraPos.z + self.offset.z, 
                                             lookAt.x, lookAt.y, lookAt.z,
@@ -168,6 +204,53 @@ function pdxCamera() constructor {
         self.changed = false;
     }
     
+    static reset = function() {
+        self.inclination = 90;
+        self.azimuth = 90;
+        
+        switch(self.cameraType) {
+            case CAMERA_TYPE.ORTHOGRAPHIC: 
+                self.roll = 0;
+            break;
+            case CAMERA_TYPE.PERSPECTIVE:
+                self.roll = 180;
+            break;
+        }
+        self.setCameraType();
+        self.changed = true;
+    }
+    
+    static switchLens = function() {
+        if(self.cameraType == CAMERA_TYPE.ORTHOGRAPHIC) {
+                self.cameraType = CAMERA_TYPE.PERSPECTIVE;
+        } else { 
+                self.cameraType = CAMERA_TYPE.ORTHOGRAPHIC;
+        }
+        //self.incRoll(180);
+        self.setCameraType();
+        self.changed = true;
+        
+    }
+    
+    static setCameraType = function() {
+        switch(self.cameraType) {
+            case CAMERA_TYPE.ORTHOGRAPHIC: 
+                self.focalLength = -self.focalPlane.height;
+                self.cameraPos.z = self.focalLength;
+                self.znear = 1;
+                self.zfar = 32000;
+                self.projmat = matrix_build_projection_ortho(self.focalPlane.width, self.focalPlane.height, self.znear, self.zfar);
+            break;
+            case CAMERA_TYPE.PERSPECTIVE:
+                self.focalLength = -self.focalPlane.getHalfHeight() / dtan((fieldOfView) / 2);
+                self.cameraPos.z = self.focalLength;
+                self.znear = abs(self.cameraPos.z / 10);
+                self.zfar = abs(self.cameraPos.z * 50);
+                
+                self.projmat = matrix_build_projection_perspective_fov(-fieldOfView, self.focalPlane.aspect, znear, zfar);
+            break;
+        }        
+    }
 }
 
 function pdxViewConfig() constructor {

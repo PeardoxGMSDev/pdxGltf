@@ -1,14 +1,14 @@
 
             //rot += 1;
-    
+        var scale = 12;
         gpu_set_zwriteenable(true);
         gpu_set_ztestenable(true);
         // draw_clear(c_black);
-        // shader_set(khr_unlit_vertex);
+        //shader_set(khr_unlit_vertex);
         
         var transform1, transform2, transform3;    
         
-        transform1 = matrix_build(window_get_width() / 2,window_get_height() / 2,0, -rotX, -rotY, -rotZ, 248,248,248);
+        transform1 = matrix_build(window_get_width() / 2,window_get_height() / 2,0, -rotX, -rotY, -rotZ, scale,scale,scale);
         //transform1 = matrix_build(lookat_x,lookat_y,0, -70, 45, 0, 0.5, 0.5, 0.5 );
         matrix_set(matrix_world, transform1);
         amodel.render();

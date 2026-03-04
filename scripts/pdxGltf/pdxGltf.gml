@@ -778,6 +778,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     static process = function() {
         self.processTime = get_timer();
         self.tree = ["","",""];
+//        self.tree[0] = new pdxWidgetTreeView("Nodes");
         self.tree[1] = new pdxWidgetTreeView("Materials");
         
         // Clear primitiveList
