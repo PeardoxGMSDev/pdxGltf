@@ -1,16 +1,78 @@
 enum CAMERA_TYPE {
     ORTHOGRAPHIC,
-    PERSPECTIVE
+    PERSPECTIVE,
+    CAVALIER
 }
 
 function pdxVec2(x = 0, y=0) constructor {
     self.x = x;
     self.y = y;    
+
+    static set = function(x = 0, y=0) {
+        self.x = x;
+        self.y = y;
+   }
+    
+    static add = function(x = 0, y=0) {
+        self.x += x;
+        self.y += y;
+   }
 }
+
 
 function pdxVec3(x = 0, y=0, z=0) : pdxVec2(x, y) constructor {
     self.z = z;
+
+    static set = function(x = 0, y=0, z=0) {
+        self.x = x;
+        self.y = y;
+        self.z = z;
+   }
+    
+    static add = function(x = 0, y=0, z=0) {
+        self.x += x;
+        self.y += y;
+        self.z += z;
+   }    
 }
+
+function pdxVec4(x = 0, y=0, z=0, w = 1) : pdxVec3(x, y, z) constructor {
+    self.w = w;
+    
+    static set = function(x = 0, y=0, z=0, w = 1) {
+        self.x = x;
+        self.y = y;
+        self.z = z;
+        self.w = w;
+   }
+    
+    static add = function(x = 0, y=0, z=0, w = 1) {
+        self.x += x;
+        self.y += y;
+        self.z += z;
+        self.w += w;
+   }
+}
+
+function pdxTransform() constructor {
+    self.translation = new pdxVec3();
+    self.rotation    = new pdxVec4();
+    self.scale       = new pdxVec3();
+    
+    static setTranslation = function(x = 0, y = 0, z = 0) {
+        self.translation.set(x, y, z);
+    }
+
+    static setRotation = function(x = 0, y = 0, z = 0, w = 0) {
+        self.rotation.set(x, y, z, w);
+    }
+
+    static setScale = function(x = 0, y = 0, z = 0) {
+        self.scale.set(x, y, z);
+    }
+
+}
+
 
 function pdxScreenRect() constructor {
     self.width = 0;
@@ -144,7 +206,7 @@ function pdxCamera() constructor {
     }
 
     static init = function(viewId, width, height, cameraType = CAMERA_TYPE.ORTHOGRAPHIC, originX = 0, originY = 0, fieldOfView = 60) {
-        if((cameraType != CAMERA_TYPE.PERSPECTIVE) && (cameraType != CAMERA_TYPE.ORTHOGRAPHIC)) {
+        if((cameraType != CAMERA_TYPE.PERSPECTIVE) && (cameraType != CAMERA_TYPE.ORTHOGRAPHIC) && (cameraType != CAMERA_TYPE.CAVALIER)) {
             return false;
         }
         if((fieldOfView <= 0) || (fieldOfView >= 135)) {
@@ -186,20 +248,41 @@ function pdxCamera() constructor {
     static update = function() {
         if(self.changed) {
             // Update everything
-            
-            self.cameraPos.x = self.focalLength * dcos(self.azimuth);
-            
-            self.cameraPos.y = -self.focalLength * dcos(self.inclination);
-            self.cameraPos.z = self.focalLength * dsin(self.azimuth);
-        //    self.cameraPos.z += 100;
+            switch(self.cameraType) {
+                case CAMERA_TYPE.ORTHOGRAPHIC:
+                case CAMERA_TYPE.CAVALIER:
+                    znear = 1;
+                    zfar = 32000;
+                    self.cameraPos.z = 10000;
+                    break;            
+                case CAMERA_TYPE.PERSPECTIVE:
+                    self.cameraPos.x = self.focalLength * dcos(self.azimuth);
+                    self.cameraPos.y = -self.focalLength * dcos(self.inclination);
+                    self.cameraPos.z = self.focalLength * dsin(self.azimuth);
+                    break;
+            }
         }
         self.upDir.x = dsin(self.roll);
         self.upDir.y = dcos(self.roll);
 
-        var lookAt = self.focalPlane.getFocalPoint(); 
-        self.viewmat = matrix_build_lookat( self.cameraPos.x + self.offset.x, self.cameraPos.y + self.offset.y, self.cameraPos.z + self.offset.z, 
-                                            lookAt.x, lookAt.y, lookAt.z,
-                                            self.upDir.x, self.upDir.y, self.upDir.z);
+        switch(self.cameraType) {
+            case CAMERA_TYPE.ORTHOGRAPHIC:
+                self.viewmat = matrix_build_lookat( self.focalPlane.width / 2, self.focalPlane.height / 2, -self.cameraPos.z, 
+                                            self.focalPlane.width / 2, self.focalPlane.height / 2, 0,
+                                                0,    1,   0);
+                break;            
+            case CAMERA_TYPE.CAVALIER:
+                self.viewmat = matrix_build_lookat( self.focalPlane.width / 2, self.focalPlane.height / 2, -self.cameraPos.z, 
+                                            self.focalPlane.width / 2, self.focalPlane.height / 2, 0,
+                                                0,    1,   0);
+                break;            
+            case CAMERA_TYPE.PERSPECTIVE:
+                var lookAt = self.focalPlane.getFocalPoint(); 
+                self.viewmat = matrix_build_lookat( self.cameraPos.x + self.offset.x, self.cameraPos.y + self.offset.y, self.cameraPos.z + self.offset.z, 
+                                                    lookAt.x, lookAt.y, lookAt.z,
+                                                    self.upDir.x, self.upDir.y, self.upDir.z);
+                break;
+            }
         camera_set_view_mat(self.cameraId, self.viewmat);
         self.changed = false;
     }
@@ -215,6 +298,9 @@ function pdxCamera() constructor {
             case CAMERA_TYPE.PERSPECTIVE:
                 self.roll = 180;
             break;
+            case CAMERA_TYPE.CAVALIER: 
+                self.roll = 0;
+            break;
         }
         self.setCameraType();
         self.changed = true;
@@ -223,7 +309,9 @@ function pdxCamera() constructor {
     static switchLens = function() {
         if(self.cameraType == CAMERA_TYPE.ORTHOGRAPHIC) {
                 self.cameraType = CAMERA_TYPE.PERSPECTIVE;
-        } else { 
+        } else if (self.cameraType == CAMERA_TYPE.PERSPECTIVE) { 
+                self.cameraType = CAMERA_TYPE.CAVALIER;
+        } else if (self.cameraType == CAMERA_TYPE.CAVALIER) { 
                 self.cameraType = CAMERA_TYPE.ORTHOGRAPHIC;
         }
         //self.incRoll(180);
@@ -231,6 +319,107 @@ function pdxCamera() constructor {
         self.changed = true;
         
     }
+    
+    static matrix_build_projection_cavalier = function(width, height, znear, zfar, angle=45) {
+        /*
+    var matrix = array_create(16, 0);
+    
+    var z_range = zfar - znear;
+    
+    // Cavalier projection coefficients (L = 1.0 - no foreshortening)
+    var alpha = dcos(angle);
+    var beta = dsin(angle);
+    
+    // Cavalier projection matrix (centered)
+    matrix[0] = 2.0 / width;    matrix[4] = 0;              matrix[8] = -(2.0 * alpha) / z_range;     matrix[12] = 0;
+    matrix[1] = 0;              matrix[5] = 2.0 / height;   matrix[9] = -(2.0 * beta) / z_range;      matrix[13] = 0;
+    matrix[2] = 0;              matrix[6] = 0;              matrix[10] = -2.0 / z_range;              matrix[14] = -(zfar + znear) / z_range;
+    matrix[3] = 0;              matrix[7] = 0;              matrix[11] = 0;                           matrix[15] = 1;
+    
+    return matrix;       
+        
+        
+        
+        */
+        // Calculate symmetric bounds from width/height
+        
+        var left = -width * 0.5;
+        var right = width * 0.5;
+        var bottom = -height * 0.5;
+        var top = height * 0.5;        
+
+        var zdepth = zfar - znear;
+        
+        // Get angles for projection
+        var alpha = dcos(angle); // 0.707 for 45°
+        var beta  = dsin(angle); // 0.707 for 45°
+
+        var w = right - left;   // width
+        var h = top - bottom;   // height        
+        
+        // Viewport scaling
+        var sx = 2 / w;
+        var sy = 2 / h;
+
+        // Viewport translation (to center)
+        var tx = 0;//(right + left) / w;
+        var ty = 0;//-(top + bottom) / h;
+        
+        // Depth mapping
+        var sz = 2.0 / zdepth;
+        var tz = -1;//2.0 / zdepth;//(zfar + znear) / zdepth;
+        
+        return [
+            sx, 0, 0, 0,
+            0, sy, 0, 0,
+            (2.0 * alpha) / zdepth, (2.0 * beta) / zdepth, sz, 0,
+            tx, ty, tz, 1
+        ];
+        
+    }
+    
+
+    
+function matrix_build_cavalier(width, height, znear, zfar, angle = 45) {
+    // Calculate oblique shearing factors using GameMaker's degree functions
+    var shear_x = dcos(angle);
+    var shear_y = dsin(angle);
+    
+    // Orthographic scaling
+    var scale_x = 2.0 / width;
+    var scale_y = 2.0 / height;
+    var scale_z = 2.0 / (zfar - znear);  // Positive for GameMaker's depth convention
+    
+    // Z offset for depth mapping
+    var offset_z = (zfar + znear) / (zfar - znear);  // Positive offset
+    
+    // Build cavalier projection matrix (row-major order)
+    var matrix = array_create(16, 0);
+    
+    matrix[0]  = scale_x;           // x scale
+    matrix[1]  = 0;                 // xy
+    matrix[2]  = -shear_x * scale_x; // xz oblique shearing
+    matrix[3]  = 0;                 // xw
+    
+    matrix[4]  = 0;                 // yx
+    matrix[5]  = scale_y;           // y scale
+    matrix[6]  = -shear_y * scale_y; // yz oblique shearing
+    matrix[7]  = 0;                 // yw
+    
+    matrix[8]  = 0;                 // zx
+    matrix[9]  = 0;                 // zy
+    matrix[10] = scale_z;           // z scale (positive)
+    matrix[11] = 0;                 // zw
+    
+    matrix[12] = 0;                 // tx
+    matrix[13] = 0;                 // ty  
+    matrix[14] = -offset_z;         // tz (negative offset)
+    matrix[15] = 1;                 // tw
+    
+    return matrix;
+}    
+    
+    
     
     static setCameraType = function() {
         switch(self.cameraType) {
@@ -246,10 +435,19 @@ function pdxCamera() constructor {
                 self.cameraPos.z = self.focalLength;
                 self.znear = abs(self.cameraPos.z / 10);
                 self.zfar = abs(self.cameraPos.z * 50);
-                
                 self.projmat = matrix_build_projection_perspective_fov(-fieldOfView, self.focalPlane.aspect, znear, zfar);
             break;
+            case CAMERA_TYPE.CAVALIER: 
+                self.focalLength = -self.focalPlane.height;
+                self.cameraPos.z = self.focalLength;
+                self.znear = 1;
+                self.zfar = 32000;
+                // self.projmat = matrix_build_projection_cavalier(self.focalPlane.width, self.focalPlane.height, self.znear, self.zfar);
+                self.projmat = matrix_build_cavalier(self.focalPlane.width, self.focalPlane.height, self.znear, self.zfar);
+                
+            break;
         }        
+        camera_set_proj_mat(self.cameraId, self.projmat);
     }
 }
 

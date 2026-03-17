@@ -85,6 +85,8 @@
     {"$GMIncludedFile":"","%Name":"default_cube.bin","CopyToMask":-1,"filePath":"datafiles/Models/basic_cube/glTF","name":"default_cube.bin","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"basic_cube.png","CopyToMask":-1,"filePath":"datafiles/models/basic_cube/screenshot","name":"basic_cube.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"basic_cube.png","CopyToMask":-1,"filePath":"datafiles/Models/basic_cube/screenshot","name":"basic_cube.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"childObjects.bin","CopyToMask":-1,"filePath":"datafiles/Models/childObjects/glTF","name":"childObjects.bin","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"childObjects.gltf","CopyToMask":-1,"filePath":"datafiles/Models/childObjects/glTF","name":"childObjects.gltf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"cube_pyramid.glb","CopyToMask":-1,"filePath":"datafiles/models/cube_pyramid/glTF-Binary","name":"cube_pyramid.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"cube_pyramid.glb","CopyToMask":-1,"filePath":"datafiles/Models/cube_pyramid/glTF-Binary","name":"cube_pyramid.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"cube_pyramid.png","CopyToMask":-1,"filePath":"datafiles/models/cube_pyramid/screenshot","name":"cube_pyramid.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -286,6 +288,9 @@
     {"$GMIncludedFile":"","%Name":"world.gltf","CopyToMask":-1,"filePath":"datafiles/Models/world/glTF","name":"world.gltf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"world.png","CopyToMask":-1,"filePath":"datafiles/models/world/screenshot","name":"world.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"world.png","CopyToMask":-1,"filePath":"datafiles/Models/world/screenshot","name":"world.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"DarkKnight.glb","CopyToMask":-1,"filePath":"datafiles/NonFree/3drt","name":"DarkKnight.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"Elongata.glb","CopyToMask":-1,"filePath":"datafiles/NonFree/3drt","name":"Elongata.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"Watcher.glb","CopyToMask":-1,"filePath":"datafiles/NonFree/3drt","name":"Watcher.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"ancient_desert_arena.glb","CopyToMask":-1,"filePath":"datafiles/NonFree","name":"ancient_desert_arena.glb","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"bike_01.png","CopyToMask":-1,"filePath":"datafiles/NonFree/bike","name":"bike_01.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"dirt_bike.bin","CopyToMask":-1,"filePath":"datafiles/NonFree/bike","name":"dirt_bike.bin","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -697,8 +702,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"RoomBlank","path":"rooms/RoomBlank/RoomBlank.yy",},},
     {"roomId":{"name":"RoomWithLayer","path":"rooms/RoomWithLayer/RoomWithLayer.yy",},},
+    {"roomId":{"name":"RoomBlank","path":"rooms/RoomBlank/RoomBlank.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

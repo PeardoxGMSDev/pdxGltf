@@ -250,7 +250,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         return rval;
     }
     
-    static processAttributes = function(attributes, treeNode, depth = 0) {
+    static processAttributes = function(attributes, treeNode) {
         if(self.keyExists(attributes, "POSITION")) {
             treeNode.addItem("POSITION", attributes.POSITION);
         }
@@ -289,10 +289,10 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }    
     }
     
-    static processPrimitive = function(primitive, treeNode, depth = 0) {
+    static processPrimitive = function(primitive, treeNode) {
         if(self.keyExists(primitive, "attributes")) {
             var leaf = treeNode.addNode("Attributes");
-            self.processAttributes(primitive.attributes, leaf, depth + 1);
+            self.processAttributes(primitive.attributes, leaf);
         }
         if(self.keyExists(primitive, "indices")) {
             treeNode.addItem("indices", primitive.indices);
@@ -309,11 +309,13 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.keyExists(primitive, "extensions")) {
             treeNode.addItem("extensions", primitive.extensions);
         }    
+        // ToDo = add transforms
         array_push(self.primitiveList, primitive);
 //        show_debug_message(json_stringify(primitive));
     }
     
-    static processMesh = function(mesh, treeNode, depth = 0) {
+    static processMesh = function(mesh, treeNode) {
+//        var meshContents = array_create(0);
         var leaf;
         if(self.keyExists(mesh, "name")) {
             leaf = treeNode.addNode("Mesh : " + mesh.name);
@@ -324,7 +326,8 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.keyExists(mesh, "primitives")) {
             var _al = array_length(mesh.primitives);
             for(var _i = 0; _i < _al; _i++) {
-                self.processPrimitive(mesh.primitives[_i], leaf, depth + 1);
+                self.processPrimitive(mesh.primitives[_i], leaf);
+//                array_push(meshContents, primitive);
             }
         }
         
@@ -339,7 +342,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         
     }
         
-    static processNode = function(node, treeNode, depth = 0) {
+    static processNode = function(node, transform, treeNode) {
         var leaf;
         if(self.keyExists(node, "name")) {
             leaf = treeNode.addNode("Node : " + node.name);
@@ -349,21 +352,9 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         
         if(self.keyExists(node, "mesh")) {
             if(node.mesh < self.counts.meshes) {
-                self.processMesh(self.data.meshes[node.mesh], leaf, depth + 1);
+                self.processMesh(self.data.meshes[node.mesh], leaf);
             } else {
                 self.addError("Bad mesh index (" + string(node.mesh) + ")");
-            }
-        }
-        
-        if(self.keyExists(node, "children")) {
-            var _al = array_length(node.children);
-            for(var _i = 0; _i < _al; _i++) {
-                var child = node.children[_i];
-                if(child < self.counts.nodes) {
-                    self.processNode(self.data.nodes[child], depth + 1);
-                } else {
-                    self.addError("Bad node index (" + string(child) + ")");
-                }
             }
         }
         
@@ -384,17 +375,17 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         
         if(self.keyExists(node, "rotation")) {
             leaf.addItem("rotation", node.rotation);
-            self.addWarning("ToDo : Node rotation not implemented yet : " +  + string(node.rotation));
+            transform.setRotation(node.rotation[0], node.rotation[1], node.rotation[2], node.rotation[3]);
         }
         
         if(self.keyExists(node, "scale")) {
             leaf.addItem("scale", node.scale);
-            self.addWarning("ToDo : Node scale not implemented yet");
+            transform.setScale(node.scale[0], node.scale[1], node.scale[2]);
         }
         
         if(self.keyExists(node, "translation")) {
             leaf.addItem("translation", node.translation);
-            self.addWarning("ToDo : Node translation not implemented yet");
+            transform.setTranslation(node.translation[0], node.translation[1], node.translation[2]);
         }
         
         if(self.keyExists(node, "weights")) {
@@ -406,9 +397,21 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             leaf.addItem("extensions", node.extensions);
         }    
         
+        if(self.keyExists(node, "children")) {
+            var _al = array_length(node.children);
+            for(var _i = 0; _i < _al; _i++) {
+                var child = node.children[_i];
+                if(child < self.counts.nodes) {
+                    self.processNode(self.data.nodes[child], transform, leaf);
+                } else {
+                    self.addError("Bad node index (" + string(child) + ")");
+                }
+            }
+        }
+        
     }    
     
-    static processScene = function(scene, treeNode, depth = 0) {
+    static processScene = function(scene, treeNode) {
         var leaf;
         if(self.keyExists(scene, "name")) {
             leaf = treeNode.addNode("Scene : " + scene.name);
@@ -421,7 +424,8 @@ function pdxGLTFBase(): pdxModelFile() constructor {
             for(var _i = 0; _i < _al; _i++) {
                 var _node = scene.nodes[_i];
                 if(_node < self.counts.nodes) {
-                    self.processNode(self.data.nodes[_node], leaf, depth + 1);
+                    var translation = new pdxTransform();
+                    self.processNode(self.data.nodes[_node], translation, leaf);
                 } else {
                     self.addError("Bad node index (" + string(_node) + ")");
                 }
@@ -502,7 +506,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.accessorData[index] = new_struct;
     }
 
-    static processAccessors = function(depth = 0) {
+    static processAccessors = function() {
         var _al = array_length(self.data.accessors);
         if(is_undefined(self.accessorData)) {
             self.accessorData = array_create(_al, undefined);
@@ -661,7 +665,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
     }
     
 
-    static processImages = function(depth = 0) {
+    static processImages = function() {
         var _al = array_length(self.data.images);
         if(is_undefined(self.imagesData)) {
             self.imagesData = array_create(_al, undefined);
@@ -701,7 +705,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         
     }
     
-    static processTextures = function(depth = 0) {
+    static processTextures = function() {
         var _al = array_length(self.data.textures);
         if(is_undefined(self.textureData)) {
             self.textureData = array_create(_al, undefined);
@@ -726,7 +730,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         self.bufferViewData[index] = data;
     }
 
-    static processBufferViews = function(depth = 0) {
+    static processBufferViews = function() {
         var _al = array_length(self.data.bufferViews);
         if(is_undefined(self.bufferViewData)) {
             self.bufferViewData = array_create(_al, undefined);
@@ -760,7 +764,7 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         }
     }
     
-    static processBuffers = function(depth = 0) {
+    static processBuffers = function() {
         var _al = array_length(self.data.buffers);
         if(is_undefined(self.bufferData)) {
             self.bufferData = array_create(_al, undefined);
@@ -827,9 +831,11 @@ function pdxGLTFBase(): pdxModelFile() constructor {
         if(self.data.scene < self.counts.scenes) {
             var _scene = self.data.scenes[self.data.scene];
             self.processScene(_scene, self.tree[0]);
+            /*
             show_debug_message("=======================================================================");
             show_debug_message(self.tree[0].prettyPrint());
             show_debug_message("=======================================================================");
+            */
         }
         
         // show_debug_message(json_stringify( self.primitiveList ));

@@ -359,7 +359,6 @@ function pdxGltfVertexBufferSet(): pdxException() constructor {
         for(var i=0; i<self.count; i++) {
             vertex_freeze( self.buffers[i].vertexData);
         }        
-        
     }
     
     static export = function(filename) {

@@ -150,15 +150,14 @@ if(is_instanceof(pcam, pdxCamera)) {
 
 if(pcam.cameraType == CAMERA_TYPE.ORTHOGRAPHIC) {
     draw_text(20, display_get_gui_height() - 160, "Orthographic : Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
+} else if(pcam.cameraType == CAMERA_TYPE.CAVALIER) {
+    draw_text(20, display_get_gui_height() - 160, "Cavalier : Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
 } else {
     draw_text(20, display_get_gui_height() - 160, "Perspective : FOV = " + string_format(pcam.fieldOfView, 0, 9) + ", Cam = " + string(pcam.cameraPos) + ", Focus = " + string(pcam.focalPlane) + " }, rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
 }
 
-    draw_text(20, display_get_gui_height() - 120, "viewmat = " + string(pcam.viewmat));
-    draw_text(20, display_get_gui_height() - 100, "projmat = " + string(pcam.projmat));
-    draw_text(20, display_get_gui_height() -  60, "world matrix      = " + string(matrix_get(matrix_world)));
-    draw_text(20, display_get_gui_height() -  40, "projection matrix = " + string(matrix_get(matrix_projection)));
-    draw_text(20, display_get_gui_height() -  20, "view matrix       = " + string(matrix_get(matrix_view)));
+    draw_text(20, display_get_gui_height() - 140, "viewmat = " + string(pcam.viewmat));
+    draw_text(20, display_get_gui_height() - 120, "projmat = " + string_matrix4(pcam.projmat));
 } else {
     draw_text(20, display_get_gui_height() - 200, "Roll = " + string(Roll) + ", Up = { " + string(upDir.x) + ", " + string(upDir.y) + ", " + string(upDir.z) + " }");
     
@@ -167,11 +166,8 @@ if(pcam.cameraType == CAMERA_TYPE.ORTHOGRAPHIC) {
     } else {
         draw_text(20, display_get_gui_height() - 160, "fov = " + string_format(fieldOfView, 0, 9) + ", Cam = { " + string(lookat_x )  + ", " + string(lookat_y ) + ", " + string(cpos) + " }, znear = " + string(znear) + ", zfar = " + string(zfar) + ", rot = { " + string(rotX) + ", " + string(rotY) + ", " + string(rotZ) + " } ");    
     }
-    draw_text(20, display_get_gui_height() - 120, "viewmat = " + string(viewmat));
-    draw_text(20, display_get_gui_height() - 100, "projmat = " + string(projmat));
-    draw_text(20, display_get_gui_height() -  60, "world matrix      = " + string(matrix_get(matrix_world)));
-    draw_text(20, display_get_gui_height() -  40, "projection matrix = " + string(matrix_get(matrix_projection)));
-    draw_text(20, display_get_gui_height() -  20, "view matrix       = " + string(matrix_get(matrix_view)));
+    draw_text(20, display_get_gui_height() - 140, "viewmat = " + string(viewmat));
+    draw_text(20, display_get_gui_height() - 120, "projmat = " + string_matrix4(projmat));
 }
     
 draw_rectangle(1,1,display_get_gui_width()-2, display_get_gui_height()-2, true);

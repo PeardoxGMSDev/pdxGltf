@@ -1,6 +1,6 @@
 
             //rot += 1;
-        var scale = 12;
+        var scale = 240;
         gpu_set_zwriteenable(true);
         gpu_set_ztestenable(true);
         // draw_clear(c_black);

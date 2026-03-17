@@ -140,7 +140,6 @@ function AccessorTypeToString(value) {
     return "????";
 }
 
-
 function pdxGltfDataAbstractBase() : pdxException() constructor {
     self.extensions                      = undefined;    // extension                       JSON object with extension-specific objects.            No
     self.extras                          = undefined;    // extras                          Application-specific data.                              No

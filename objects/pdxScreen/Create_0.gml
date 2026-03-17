@@ -46,9 +46,10 @@ _fn = "Models/textured_1k_cube/glTF/textured_1k_cube.gltf";
 _fn = "Models/textured_1k_cube/glTF/textured_1k_cube-missingXPlus.gltf";
 _fn = "NonFree/d6.glb";
 _fn = "Models/uvcube/glTF-Binary/uvcube.glb";
-_fn = "Models/uvcube/glTF-JPEG/uvcube.gltf";
+// _fn = "Models/uvcube/glTF-JPEG/uvcube.gltf";
 // _fn = "Models/uvcube/glTF/uvcube.gltf";
-_fn = "Models/CubeRotateTranslate/glTF/CubeRotateTranslate.gltf";
+// _fn = "Models/CubeRotateTranslate/glTF/CubeRotateTranslate.gltf";
+ _fn = "Models/childObjects/glTF/childObjects.gltf";
 
  // _fn = "gltf-samples/Models/Sponza/glTF/Sponza.gltf";
 //_fn = "NonFree/Druid.glb";

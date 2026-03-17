@@ -13,6 +13,33 @@ function exception_handler(except) {
 function init() {
 }
 
+function string_matrix4(m) {
+    if(!is_array(m) || (array_length(m) != 16)) {
+        return "Not an array(16)"
+    }
+    return "\n{ " +
+        string_format(m[ 0], 4, 8) + ", " +
+        string_format(m[ 4], 4, 8) + ", " +
+        string_format(m[ 8], 4, 8) + ", " +
+        string_format(m[12], 4, 8) + "},\n" +
+        "{ " +
+        string_format(m[ 1], 4, 8) + ", " +
+        string_format(m[ 5], 4, 8) + ", " +
+        string_format(m[ 9], 4, 8) + ", " +
+        string_format(m[13], 4, 8) + "},\n" +
+        "{ " +
+        string_format(m[ 2], 4, 8) + ", " +
+        string_format(m[ 6], 4, 8) + ", " +
+        string_format(m[10], 4, 8) + ", " +
+        string_format(m[14], 4, 8) + "},\n" +
+        "{ " +
+        string_format(m[ 3], 4, 8) + ", " +
+        string_format(m[ 7], 4, 8) + ", " +
+        string_format(m[11], 4, 8) + ", " +
+        string_format(m[15], 4, 8) + "}";
+    
+}
+
 function byteToHexDigit(byte) {
     if(byte < 10) {
         return chr(byte + 48);
